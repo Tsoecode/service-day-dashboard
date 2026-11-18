@@ -1,0 +1,61 @@
+<ng-container *ngIf="vm$ | async as vm; else loading">
+  <section class="card" aria-labelledby="mr">
+    <div class="card__head">
+      <div>
+        <h2 class="card__title" id="mr">My registrations</h2>
+        <p class="card__sub">You can change activity or withdraw until each activity's cut-off time.</p>
+      </div>
+      <a class="btn btn--primary btn--sm" routerLink="/employee/opportunities"><app-icon name="plus"></app-icon>Find activities</a>
+    </div>
+
+    <div class="table-wrap" *ngIf="vm.rows.length; else empty">
+      <table class="table stackable">
+        <thead><tr><th>Activity</th><th>Schedule</th><th>Cut-off</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let r of vm.rows; trackBy: trackById">
+            <td data-label="Activity"><span class="title">{{ r.activity.title }}</span><span class="sub">{{ r.activity.ngoName }} · {{ r.activity.location }}</span></td>
+            <td data-label="Schedule">{{ r.activity.startAt | date: 'EEE d MMM, h:mm a' }}</td>
+            <td data-label="Cut-off">{{ r.activity.cutoffAt | date: 'd MMM, h:mm a' }}<br /><span class="sub">{{ r.activity.cutoffAt | timeUntil: vm.now }}</span></td>
+            <td data-label="Status">
+              <span class="chip chip--ok" *ngIf="r.reg.checkedInAt; else regd">Checked in {{ r.reg.checkedInAt | date: 'h:mm a' }}</span>
+              <ng-template #regd><app-status-badge [status]="r.locked ? 'closed' : 'open'"></app-status-badge><span class="sub"> {{ r.locked ? 'Locked' : 'Editable' }}</span></ng-template>
+            </td>
+            <td class="actions-cell">
+              <div class="actions">
+                <button type="button" class="btn btn--ghost btn--sm" [disabled]="r.locked" (click)="startChange(r)"><app-icon name="swap"></app-icon>Change</button>
+                <button type="button" class="btn btn--danger btn--sm" [disabled]="r.locked" (click)="cancelling = r"><app-icon name="x"></app-icon>Withdraw</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #empty><p class="empty">You have not registered for any activity yet.</p></ng-template>
+  </section>
+
+  <app-modal *ngIf="changing" title="Change activity" (closed)="changing = null">
+    <p class="muted">Moving from <strong>{{ changing.activity.title }}</strong>. Choose another available activity:</p>
+    <ul class="choices" *ngIf="vm.alternatives.length; else noalt">
+      <li *ngFor="let a of vm.alternatives">
+        <label>
+          <input type="radio" name="alt" [checked]="chosen?.id === a.id" (change)="chosen = a" />
+          <span><strong>{{ a.title }}</strong><br /><small>{{ a.ngoName }} · {{ a.startAt | date: 'd MMM, h:mm a' }} · {{ a.maxParticipants - a.registeredCount }} slots left</small></span>
+        </label>
+      </li>
+    </ul>
+    <ng-template #noalt><p class="alert alert--info">No other activity currently has free slots.</p></ng-template>
+    <div class="form-actions">
+      <button type="button" class="btn btn--ghost" (click)="changing = null">Keep current</button>
+      <button type="button" class="btn btn--primary" [disabled]="!chosen || busy" (click)="applyChange()">{{ busy ? 'Saving…' : 'Confirm change' }}</button>
+    </div>
+  </app-modal>
+
+  <app-modal *ngIf="cancelling" title="Withdraw from activity?" [width]="440" (closed)="cancelling = null">
+    <p>You are about to withdraw from <strong>{{ cancelling.activity.title }}</strong>. Your slot will be released immediately.</p>
+    <div class="form-actions">
+      <button type="button" class="btn btn--ghost" (click)="cancelling = null">Keep registration</button>
+      <button type="button" class="btn btn--primary" [disabled]="busy" (click)="applyCancel()">{{ busy ? 'Withdrawing…' : 'Yes, withdraw' }}</button>
+    </div>
+  </app-modal>
+</ng-container>
+<ng-template #loading><p class="empty">Loading registrations…</p></ng-template>

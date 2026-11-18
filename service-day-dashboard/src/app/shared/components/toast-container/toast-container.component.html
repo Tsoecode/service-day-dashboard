@@ -1,0 +1,7 @@
+<div class="toasts" aria-live="polite">
+  <div class="toast" *ngFor="let t of toasts.toasts$ | async" [attr.data-type]="t.type" role="status">
+    <app-icon [name]="t.type === 'error' ? 'alert' : t.type === 'success' ? 'check' : 'bell'"></app-icon>
+    <span>{{ t.text }}</span>
+    <button type="button" class="icon-btn" aria-label="Dismiss" (click)="toasts.dismiss(t.id)"><app-icon name="x"></app-icon></button>
+  </div>
+</div>

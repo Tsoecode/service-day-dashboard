@@ -1,0 +1,4 @@
+.backdrop { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 16, 54, 0.45); backdrop-filter: blur(2px); }
+.dialog { width: 100%; max-height: calc(100vh - 32px); display: flex; flex-direction: column; background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(30, 20, 100, 0.25); }
+.dialog__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px 8px; h2 { margin: 0; font-size: 18px; } }
+.dialog__body { padding: 8px 24px 24px; overflow-y: auto; }

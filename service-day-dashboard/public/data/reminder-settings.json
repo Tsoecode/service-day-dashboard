@@ -1,0 +1,23 @@
+{
+  "rules": [
+    {
+      "id": "w1",
+      "label": "1 week before",
+      "hoursBefore": 168,
+      "enabled": true
+    },
+    {
+      "id": "d3",
+      "label": "3 days before",
+      "hoursBefore": 72,
+      "enabled": true
+    },
+    {
+      "id": "d1",
+      "label": "1 day before",
+      "hoursBefore": 24,
+      "enabled": true
+    }
+  ],
+  "notifyNgos": true
+}

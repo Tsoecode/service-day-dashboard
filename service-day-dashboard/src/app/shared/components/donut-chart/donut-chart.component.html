@@ -1,0 +1,14 @@
+<figure class="donut" [attr.aria-label]="percent + '% ' + label">
+  <svg viewBox="0 0 140 140">
+    <defs>
+      <linearGradient id="donutGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#a06bff" />
+        <stop offset="100%" stop-color="#5434ec" />
+      </linearGradient>
+    </defs>
+    <circle cx="70" cy="70" [attr.r]="radius" fill="none" stroke="#ffe3f1" stroke-width="18" />
+    <circle cx="70" cy="70" [attr.r]="radius" fill="none" stroke="url(#donutGrad)" stroke-width="18" stroke-linecap="round"
+            [attr.stroke-dasharray]="dash + ' ' + circumference" transform="rotate(-90 70 70)" />
+  </svg>
+  <figcaption><strong>{{ percent }}%</strong><span>{{ label }}</span></figcaption>
+</figure>

@@ -1,0 +1,13 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: var(--font); font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); }
+h1, h2, h3 { line-height: 1.25; }
+img, svg { max-width: 100%; }
+a { color: var(--primary); }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 20px; }
+.row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.row--between { justify-content: space-between; }

@@ -1,0 +1,20 @@
+<app-modal [title]="activity.title" (closed)="closed.emit()">
+  <p class="ngo">{{ activity.ngoName }} · <app-status-badge [status]="status"></app-status-badge></p>
+  <p class="desc">{{ activity.description }}</p>
+  <dl class="facts">
+    <div><dt>Service type</dt><dd>{{ activity.serviceType }}</dd></div>
+    <div><dt>Schedule</dt><dd>{{ activity.startAt | date: 'EEE, d MMM y' }}<br />{{ activity.startAt | date: 'h:mm a' }} – {{ activity.endAt | date: 'h:mm a' }}</dd></div>
+    <div><dt>Location</dt><dd>{{ activity.location }}</dd></div>
+    <div><dt>Registration cut-off</dt><dd>{{ activity.cutoffAt | date: 'd MMM y, h:mm a' }}<br /><small>{{ cutoffText }}</small></dd></div>
+    <div><dt>Slots</dt><dd><strong>{{ left }}</strong> available of {{ activity.maxParticipants }}</dd></div>
+  </dl>
+  <p class="alert alert--ok" *ngIf="registered">You are registered for this activity.</p>
+  <p class="alert alert--info" *ngIf="!registered && status === 'closed'">Registration closed at the cut-off time.</p>
+  <p class="alert" *ngIf="!registered && status === 'full'">This activity is full.</p>
+  <div class="form-actions">
+    <button type="button" class="btn btn--ghost" (click)="closed.emit()">Close</button>
+    <button type="button" class="btn btn--primary" *ngIf="canRegister" [disabled]="busy" (click)="confirm.emit(activity)">
+      {{ busy ? 'Registering…' : 'Confirm registration' }}
+    </button>
+  </div>
+</app-modal>

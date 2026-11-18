@@ -1,0 +1,10 @@
+<div class="chart" role="img" aria-label="Slots taken versus slots offered per activity">
+  <div class="col" *ngFor="let d of data" [title]="d.label + ': ' + d.value + ' / ' + d.total + ' slots taken'">
+    <span class="tip">{{ d.value }}/{{ d.total }}</span>
+    <div class="track" [style.height.%]="height(d)">
+      <div class="fill" [style.height.%]="fill(d)"></div>
+    </div>
+    <span class="lbl">{{ d.label }}</span>
+  </div>
+  <p class="empty" *ngIf="!data.length">No data yet.</p>
+</div>

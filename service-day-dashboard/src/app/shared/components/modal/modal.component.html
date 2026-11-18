@@ -1,0 +1,9 @@
+<div class="backdrop" (click)="close()">
+  <section class="dialog" role="dialog" aria-modal="true" [attr.aria-label]="title" [style.max-width.px]="width" (click)="$event.stopPropagation()">
+    <header class="dialog__head">
+      <h2>{{ title }}</h2>
+      <button type="button" class="icon-btn" aria-label="Close dialog" (click)="close()"><app-icon name="x"></app-icon></button>
+    </header>
+    <div class="dialog__body"><ng-content></ng-content></div>
+  </section>
+</div>

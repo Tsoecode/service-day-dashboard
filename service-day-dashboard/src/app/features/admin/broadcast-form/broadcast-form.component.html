@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="send()" novalidate>
+  <div class="form-grid">
+    <div class="field">
+      <label for="bf-type">Message type</label>
+      <select id="bf-type" class="input" formControlName="type">
+        <option value="broadcast">Announcement</option>
+        <option value="reminder">Reminder</option>
+        <option value="urgent">Urgent update (e.g. last slots)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="bf-target">Send to</label>
+      <select id="bf-target" class="input" formControlName="target">
+        <option value="all">All employees</option>
+        <option value="registered">Employees registered for an activity</option>
+        <option value="unregistered">Employees NOT registered for an activity</option>
+      </select>
+    </div>
+    <div class="field span-2" *ngIf="needsActivity">
+      <label for="bf-activity">Activity</label>
+      <select id="bf-activity" class="input" formControlName="activityId" [class.invalid]="invalid('activityId')">
+        <option value="">Select an activity</option>
+        <option *ngFor="let a of activities" [value]="a.id">{{ a.title }} — {{ a.ngoName }}</option>
+      </select>
+      <p class="error" *ngIf="invalid('activityId')">Choose the activity this message is about.</p>
+    </div>
+    <div class="field span-2">
+      <label for="bf-title">Title</label>
+      <input id="bf-title" class="input" formControlName="title" [class.invalid]="invalid('title')" />
+      <p class="error" *ngIf="invalid('title')">Title is required (max 80 characters).</p>
+    </div>
+    <div class="field span-2">
+      <label for="bf-msg">Message</label>
+      <textarea id="bf-msg" class="input" formControlName="message" [class.invalid]="invalid('message')"></textarea>
+      <p class="error" *ngIf="invalid('message')">Message is required (max 400 characters).</p>
+    </div>
+  </div>
+  <p class="alert" role="alert" *ngIf="serverError">{{ serverError }}</p>
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary" [disabled]="sending"><app-icon name="send"></app-icon>{{ sending ? 'Sending…' : 'Send notification' }}</button>
+  </div>
+</form>

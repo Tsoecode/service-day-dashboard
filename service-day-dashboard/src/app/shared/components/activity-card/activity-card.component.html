@@ -1,0 +1,26 @@
+<article class="act">
+  <header class="act__head">
+    <span class="act__type">{{ activity.serviceType }}</span>
+    <app-status-badge [status]="status"></app-status-badge>
+  </header>
+  <h3 class="act__title">{{ activity.title }}</h3>
+  <p class="act__ngo">{{ activity.ngoName }}</p>
+  <ul class="act__meta">
+    <li><app-icon name="calendar"></app-icon>{{ activity.startAt | date: 'EEE, d MMM y · h:mm a' }}</li>
+    <li><app-icon name="pin"></app-icon>{{ activity.location }}</li>
+    <li><app-icon name="clock"></app-icon>Cut-off: {{ activity.cutoffAt | date: 'd MMM, h:mm a' }} <small>({{ cutoffText }})</small></li>
+  </ul>
+  <div class="act__slots">
+    <div class="progress" role="progressbar" [attr.aria-valuenow]="percent" aria-valuemin="0" aria-valuemax="100">
+      <span [style.width.%]="percent" [class.full]="left === 0"></span>
+    </div>
+    <p><strong>{{ left }}</strong> of {{ activity.maxParticipants }} slots available</p>
+  </div>
+  <footer class="act__actions">
+    <button type="button" class="btn btn--ghost" (click)="details.emit(activity)">Details</button>
+    <span class="chip chip--ok" *ngIf="registered"><app-icon name="check"></app-icon>Registered</span>
+    <button type="button" class="btn btn--primary" *ngIf="!registered" [disabled]="!canRegister" (click)="register.emit(activity)">
+      {{ status === 'full' ? 'Full' : status === 'open' ? 'Register' : 'Closed' }}
+    </button>
+  </footer>
+</article>

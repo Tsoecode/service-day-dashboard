@@ -1,0 +1,8 @@
+<article class="stat">
+  <span class="stat__icon" [attr.data-tone]="tone"><app-icon [name]="icon"></app-icon></span>
+  <div class="stat__body">
+    <p class="stat__label">{{ label }}</p>
+    <p class="stat__value">{{ value }}</p>
+    <p class="stat__hint" *ngIf="hint">{{ hint }}</p>
+  </div>
+</article>

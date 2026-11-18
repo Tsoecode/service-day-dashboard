@@ -1,0 +1,52 @@
+<div class="stack">
+  <div class="split split--even">
+    <section class="card" aria-labelledby="rs">
+      <h2 class="card__title" id="rs">Automated reminder schedule</h2>
+      <p class="card__sub">Registered employees (and NGOs) are reminded automatically before each activity starts.</p>
+      <ng-container *ngIf="settings; else loading">
+        <ul class="rules">
+          <li *ngFor="let r of settings.rules; trackBy: trackById">
+            <label class="check"><input type="checkbox" [(ngModel)]="r.enabled" [name]="'en-' + r.id" /><span class="sr-only">Enable</span></label>
+            <div class="hours">
+              <input type="number" min="1" class="input" [ngModel]="r.hoursBefore" (ngModelChange)="setHours(r, $event)" [name]="'h-' + r.id" [attr.aria-label]="'Hours before for ' + r.label" />
+              <span class="muted">hours</span>
+            </div>
+            <strong class="lbl">{{ r.label }}</strong>
+            <button type="button" class="icon-btn" (click)="removeRule(r)" aria-label="Remove reminder"><app-icon name="trash"></app-icon></button>
+          </li>
+        </ul>
+        <label class="check check--row"><input type="checkbox" [(ngModel)]="settings.notifyNgos" name="ngos" />Also notify NGOs about registrations, cancellations and reminders</label>
+        <div class="form-actions">
+          <button type="button" class="btn btn--ghost" (click)="addRule()"><app-icon name="plus"></app-icon>Add reminder</button>
+          <button type="button" class="btn btn--primary" [disabled]="saving" (click)="save()">{{ saving ? 'Saving…' : 'Save schedule' }}</button>
+        </div>
+      </ng-container>
+      <ng-template #loading><p class="empty">Loading schedule…</p></ng-template>
+    </section>
+
+    <section class="card" aria-labelledby="bc">
+      <h2 class="card__title" id="bc">Broadcast a message</h2>
+      <p class="card__sub">Announce updates or highlight urgent news such as the last available slots.</p>
+      <app-broadcast-form *ngIf="activities$ | async as acts" [activities]="acts"></app-broadcast-form>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="lg">
+    <div class="card__head"><div><h2 class="card__title" id="lg">Notification log</h2><p class="card__sub">Latest 40 messages sent to employees and NGOs (automatic and manual)</p></div></div>
+    <div class="table-wrap" *ngIf="log$ | async as log">
+      <table class="table stackable">
+        <thead><tr><th>Sent</th><th>Audience</th><th>Type</th><th>Message</th><th class="num">Recipients</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let n of log; trackBy: trackById">
+            <td data-label="Sent">{{ n.createdAt | date: 'd MMM, h:mm a' }}</td>
+            <td data-label="Audience">{{ n.audience === 'ngo' ? 'NGO' : 'Employees' }}<br /><span class="sub">{{ n.recipientLabel }}</span></td>
+            <td data-label="Type"><span class="badge" [attr.data-status]="n.urgent ? 'full' : 'open'">{{ n.type }}</span></td>
+            <td data-label="Message"><span class="title">{{ n.title }}</span><span class="sub">{{ n.message }}</span></td>
+            <td data-label="Recipients" class="num">{{ n.recipientCount }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="empty" *ngIf="!log.length">Nothing has been sent yet.</p>
+    </div>
+  </section>
+</div>

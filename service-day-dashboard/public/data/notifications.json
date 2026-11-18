@@ -1,0 +1,15 @@
+[
+  {
+    "id": "n1",
+    "audience": "employee",
+    "recipientIds": "all",
+    "recipientLabel": "All employees",
+    "ngoName": null,
+    "activityId": null,
+    "type": "broadcast",
+    "title": "Service Day 2026 is open!",
+    "message": "Browse the approved NGO activities and register before each cut-off time. Slots are limited.",
+    "urgent": false,
+    "hoursAgo": 72
+  }
+]

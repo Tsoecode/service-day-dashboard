@@ -1,0 +1,32 @@
+<ng-container *ngIf="vm$ | async as vm; else loading">
+  <section class="stack">
+    <div class="card filters">
+      <div class="field">
+        <label for="type">Service type</label>
+        <select id="type" class="input" (change)="type$.next($any($event.target).value)">
+          <option value="">All types</option>
+          <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="avail">Availability</label>
+        <select id="avail" class="input" (change)="availability$.next($any($event.target).value)">
+          <option value="open">Open for registration</option>
+          <option value="all">Show closed &amp; full too</option>
+        </select>
+      </div>
+      <p class="muted count">{{ vm.list.length }} activit{{ vm.list.length === 1 ? 'y' : 'ies' }}</p>
+    </div>
+
+    <div class="cards" *ngIf="vm.list.length; else none">
+      <div class="card" *ngFor="let a of vm.list; trackBy: trackById">
+        <app-activity-card [activity]="a" [now]="vm.now" [registered]="vm.registeredIds.has(a.id)" (register)="selected = $event" (details)="selected = $event"></app-activity-card>
+      </div>
+    </div>
+    <ng-template #none><p class="card empty">No activities match your filters.</p></ng-template>
+  </section>
+
+  <app-activity-detail-modal *ngIf="selected" [activity]="selected" [now]="vm.now" [busy]="busy"
+    [registered]="vm.registeredIds.has(selected.id)" (confirm)="confirm($event)" (closed)="selected = null"></app-activity-detail-modal>
+</ng-container>
+<ng-template #loading><p class="empty">Loading activities…</p></ng-template>

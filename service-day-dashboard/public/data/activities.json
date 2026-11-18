@@ -1,0 +1,98 @@
+[
+  {
+    "id": "a1",
+    "ngoName": "Hope Food Bank",
+    "title": "Food Packing Drive",
+    "serviceType": "Food Security",
+    "description": "Sort, pack and label food hampers for 300 low-income families in the Klang Valley.",
+    "location": "Hope Food Bank Warehouse, Petaling Jaya",
+    "startsInHours": 513,
+    "durationHours": 4,
+    "maxParticipants": 20,
+    "cutoffInHours": 336
+  },
+  {
+    "id": "a2",
+    "ngoName": "Ocean Guardians",
+    "title": "Beach Clean-up",
+    "serviceType": "Environment",
+    "description": "Collect and sort marine debris along the coastline and learn about plastic pollution from marine biologists.",
+    "location": "Teluk Gadong Beach, Klang",
+    "startsInHours": 344,
+    "durationHours": 5,
+    "maxParticipants": 30,
+    "cutoffInHours": 240
+  },
+  {
+    "id": "a3",
+    "ngoName": "Little Readers Foundation",
+    "title": "Reading Buddy Sessions",
+    "serviceType": "Education",
+    "description": "Read aloud and run simple literacy games with primary school children from underserved communities.",
+    "location": "SK Sentul Community Library, Kuala Lumpur",
+    "startsInHours": 250,
+    "durationHours": 3,
+    "maxParticipants": 12,
+    "cutoffInHours": 144
+  },
+  {
+    "id": "a4",
+    "ngoName": "Golden Years Care",
+    "title": "Elderly Home Visit",
+    "serviceType": "Elderly Care",
+    "description": "Spend an afternoon with senior residents through games, music and light refreshments.",
+    "location": "Golden Years Care Home, Subang Jaya",
+    "startsInHours": 134,
+    "durationHours": 3,
+    "maxParticipants": 15,
+    "cutoffInHours": 30
+  },
+  {
+    "id": "a5",
+    "ngoName": "Green Earth Trust",
+    "title": "Urban Tree Planting",
+    "serviceType": "Environment",
+    "description": "Plant 500 native saplings at a restored forest reserve. Gloves and tools are provided.",
+    "location": "FRIM Reserve, Kepong",
+    "startsInHours": 680,
+    "durationHours": 4,
+    "maxParticipants": 40,
+    "cutoffInHours": 480
+  },
+  {
+    "id": "a6",
+    "ngoName": "Paws & Hearts",
+    "title": "Animal Shelter Care",
+    "serviceType": "Animal Welfare",
+    "description": "Help with feeding, cleaning kennels and walking rescued dogs at the shelter.",
+    "location": "Paws & Hearts Shelter, Ampang",
+    "startsInHours": -1,
+    "durationHours": 4,
+    "maxParticipants": 10,
+    "cutoffInHours": -48
+  },
+  {
+    "id": "a7",
+    "ngoName": "TechForAll",
+    "title": "Digital Skills Workshop",
+    "serviceType": "Education",
+    "description": "Teach basic digital literacy and online safety to small business owners and senior citizens.",
+    "location": "TechForAll Learning Hub, Cyberjaya",
+    "startsInHours": 849,
+    "durationHours": 4,
+    "maxParticipants": 25,
+    "cutoffInHours": 672
+  },
+  {
+    "id": "a8",
+    "ngoName": "Community Kitchen",
+    "title": "Community Kitchen Service",
+    "serviceType": "Food Security",
+    "description": "Prepare and serve hot meals to 150 homeless and low-income residents.",
+    "location": "Community Kitchen, Chow Kit",
+    "startsInHours": -168,
+    "durationHours": 4,
+    "maxParticipants": 16,
+    "cutoffInHours": -336
+  }
+]

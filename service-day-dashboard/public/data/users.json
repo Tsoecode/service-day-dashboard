@@ -1,0 +1,146 @@
+[
+  {
+    "id": "u0",
+    "name": "Evano Admin",
+    "email": "admin@company.com",
+    "password": "admin123",
+    "role": "admin",
+    "department": "Corporate Affairs",
+    "jobTitle": "CSR Administrator"
+  },
+  {
+    "id": "u1",
+    "name": "Sarah Lim",
+    "email": "employee@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Engineering",
+    "jobTitle": "Executive"
+  },
+  {
+    "id": "u2",
+    "name": "Daniel Tan",
+    "email": "daniel.tan@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Human Resources",
+    "jobTitle": "Engineer"
+  },
+  {
+    "id": "u3",
+    "name": "Aisha Rahman",
+    "email": "aisha.rahman@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Marketing",
+    "jobTitle": "Manager"
+  },
+  {
+    "id": "u4",
+    "name": "Kevin Wong",
+    "email": "kevin.wong@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Operations",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u5",
+    "name": "Priya Nair",
+    "email": "priya.nair@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Sales",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u6",
+    "name": "Hafiz Ismail",
+    "email": "hafiz.ismail@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Finance",
+    "jobTitle": "Specialist"
+  },
+  {
+    "id": "u7",
+    "name": "Mei Ling Chong",
+    "email": "mei.ling.chong@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Engineering",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u8",
+    "name": "Arjun Singh",
+    "email": "arjun.singh@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Human Resources",
+    "jobTitle": "Executive"
+  },
+  {
+    "id": "u9",
+    "name": "Nurul Huda",
+    "email": "nurul.huda@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Marketing",
+    "jobTitle": "Specialist"
+  },
+  {
+    "id": "u10",
+    "name": "Jason Lee",
+    "email": "jason.lee@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Operations",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u11",
+    "name": "Farah Aziz",
+    "email": "farah.aziz@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Sales",
+    "jobTitle": "Specialist"
+  },
+  {
+    "id": "u12",
+    "name": "Ryan Ong",
+    "email": "ryan.ong@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Finance",
+    "jobTitle": "Engineer"
+  },
+  {
+    "id": "u13",
+    "name": "Siti Aminah",
+    "email": "siti.aminah@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Engineering",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u14",
+    "name": "Vincent Lau",
+    "email": "vincent.lau@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Human Resources",
+    "jobTitle": "Analyst"
+  },
+  {
+    "id": "u15",
+    "name": "Grace Teo",
+    "email": "grace.teo@company.com",
+    "password": "employee123",
+    "role": "employee",
+    "department": "Marketing",
+    "jobTitle": "Manager"
+  }
+]

@@ -1,0 +1,8 @@
+.list { list-style: none; margin: 0; padding: 0; }
+li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 10px; border-top: 1px solid var(--line); border-radius: 12px; cursor: pointer; &:hover { background: #faf9ff; } }
+li.unread { background: #f6f4ff; }
+li.urgent .ico { background: #fee4e2; color: #b42318; }
+li.empty { justify-content: center; cursor: default; }
+.ico { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); font-size: 18px; }
+.txt { flex: 1; min-width: 0; p { margin: 2px 0 4px; } small { color: var(--muted); } }
+.new { width: 10px; height: 10px; margin-top: 6px; border-radius: 50%; background: var(--primary); flex: none; }

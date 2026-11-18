@@ -1,0 +1,47 @@
+<main class="login">
+  <div class="shape shape--ring-a" aria-hidden="true"></div>
+  <div class="shape shape--ring-b" aria-hidden="true"></div>
+  <div class="shape shape--bolt" aria-hidden="true"></div>
+  <div class="shape shape--pill-a" aria-hidden="true"></div>
+  <div class="shape shape--pill-b" aria-hidden="true"></div>
+  <div class="shape shape--wave" aria-hidden="true"></div>
+
+  <section class="glass" aria-labelledby="login-title">
+    <div class="glass__logo">
+      <span class="glass__mark"><app-icon name="heart"></app-icon></span>
+      <span>Service Day</span>
+    </div>
+    <h1 id="login-title">Login</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" class="input" type="email" formControlName="email" placeholder="username@company.com" autocomplete="username" [class.invalid]="invalid('email')" />
+        <p class="error" *ngIf="invalid('email')">Enter a valid email address.</p>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="pw">
+          <input id="password" class="input" [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Password" autocomplete="current-password" [class.invalid]="invalid('password')" />
+          <button type="button" class="pw__toggle" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'" [attr.aria-pressed]="showPassword">
+            <app-icon name="eye"></app-icon>
+          </button>
+        </div>
+        <p class="error" *ngIf="invalid('password')">Password must be at least 6 characters.</p>
+      </div>
+
+      <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="submit" class="signin" [disabled]="submitting">{{ submitting ? 'Signing in…' : 'Sign in' }}</button>
+    </form>
+
+    <div class="demo">
+      <p>Prototype accounts — tap to fill</p>
+      <div class="demo__row">
+        <button type="button" *ngFor="let a of demoAccounts" (click)="useDemo(a)">{{ a.label }}</button>
+      </div>
+    </div>
+  </section>
+</main>
+<app-toast-container></app-toast-container>

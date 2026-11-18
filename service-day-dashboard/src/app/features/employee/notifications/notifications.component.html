@@ -1,0 +1,19 @@
+<section class="card" aria-labelledby="nt" *ngIf="notifications$ | async as list; else loading">
+  <div class="card__head">
+    <div><h2 class="card__title" id="nt">Notifications &amp; reminders</h2><p class="card__sub">Registration confirmations, activity updates and scheduled reminders</p></div>
+    <button type="button" class="btn btn--ghost btn--sm" (click)="markAll()">Mark all as read</button>
+  </div>
+  <ul class="list">
+    <li *ngFor="let n of list; trackBy: trackById" [class.unread]="!n.read" [class.urgent]="n.urgent" (click)="open(n)" (keydown.enter)="open(n)" tabindex="0">
+      <span class="ico"><app-icon [name]="icon(n)"></app-icon></span>
+      <div class="txt">
+        <strong>{{ n.title }} <span class="badge" data-status="full" *ngIf="n.urgent">Urgent</span></strong>
+        <p>{{ n.message }}</p>
+        <small>{{ n.createdAt | date: 'd MMM y, h:mm a' }}</small>
+      </div>
+      <span class="new" *ngIf="!n.read" aria-label="Unread"></span>
+    </li>
+    <li class="empty" *ngIf="!list.length">You have no notifications.</li>
+  </ul>
+</section>
+<ng-template #loading><p class="empty">Loading notifications…</p></ng-template>

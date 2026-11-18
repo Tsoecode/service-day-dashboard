@@ -1,0 +1,102 @@
+<ng-container *ngIf="vm$ | async as vm; else loading">
+  <section class="card" aria-labelledby="mn">
+    <div class="card__head">
+      <div><h2 class="card__title" id="mn">Registered NGOs &amp; activities</h2><p class="card__sub">Add, update or remove NGO availability. Changes apply to employees immediately.</p></div>
+      <button type="button" class="btn btn--primary" (click)="openCreate()"><app-icon name="plus"></app-icon>Add NGO activity</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table stackable">
+        <thead><tr><th>NGO / Activity</th><th>Schedule</th><th>Location</th><th>Slots</th><th>Cut-off</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let a of vm.rows; trackBy: trackById">
+            <td data-label="NGO / Activity"><span class="title">{{ a.ngoName }}</span><span class="sub">{{ a.title }} · {{ a.serviceType }}</span></td>
+            <td data-label="Schedule">{{ a.startAt | date: 'd MMM y' }}<br /><span class="sub">{{ a.startAt | date: 'h:mm a' }} – {{ a.endAt | date: 'h:mm a' }}</span></td>
+            <td data-label="Location">{{ a.location }}</td>
+            <td data-label="Slots"><strong>{{ a.registeredCount }}</strong> / {{ a.maxParticipants }}</td>
+            <td data-label="Cut-off">{{ a.cutoffAt | date: 'd MMM, h:mm a' }}</td>
+            <td data-label="Status"><app-status-badge [status]="getStatus(a, vm.now)"></app-status-badge></td>
+            <td class="actions-cell">
+              <div class="actions">
+                <button type="button" class="btn btn--ghost btn--sm" (click)="openEdit(a)"><app-icon name="edit"></app-icon>Edit</button>
+                <button type="button" class="btn btn--danger btn--sm" (click)="deleting = a"><app-icon name="trash"></app-icon>Remove</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="empty" *ngIf="!vm.rows.length">No NGO activities found.</p>
+    </div>
+  </section>
+</ng-container>
+<ng-template #loading><p class="empty">Loading NGOs…</p></ng-template>
+
+<app-modal *ngIf="formOpen" [title]="editing ? 'Edit NGO activity' : 'Add NGO activity'" [width]="720" (closed)="formOpen = false">
+  <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <div class="form-grid">
+      <div class="field">
+        <label for="ngoName">NGO name</label>
+        <input id="ngoName" class="input" formControlName="ngoName" [class.invalid]="invalid('ngoName')" />
+        <p class="error" *ngIf="invalid('ngoName')">NGO name is required (max 80 characters).</p>
+      </div>
+      <div class="field">
+        <label for="title">Activity title</label>
+        <input id="title" class="input" formControlName="title" [class.invalid]="invalid('title')" />
+        <p class="error" *ngIf="invalid('title')">Activity title is required (max 100 characters).</p>
+      </div>
+      <div class="field">
+        <label for="serviceType">Service type</label>
+        <select id="serviceType" class="input" formControlName="serviceType" [class.invalid]="invalid('serviceType')">
+          <option value="" disabled>Select a type</option>
+          <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+        </select>
+        <p class="error" *ngIf="invalid('serviceType')">Select a service type.</p>
+      </div>
+      <div class="field">
+        <label for="maxParticipants">Maximum employees</label>
+        <input id="maxParticipants" type="number" min="1" class="input" formControlName="maxParticipants" [class.invalid]="invalid('maxParticipants')" />
+        <p class="error" *ngIf="invalid('maxParticipants')">Enter a number between 1 and 1000.</p>
+      </div>
+      <div class="field span-2">
+        <label for="location">Location</label>
+        <input id="location" class="input" formControlName="location" [class.invalid]="invalid('location')" />
+        <p class="error" *ngIf="invalid('location')">Location is required.</p>
+      </div>
+      <div class="field span-2">
+        <label for="description">Description</label>
+        <textarea id="description" class="input" formControlName="description" [class.invalid]="invalid('description')"></textarea>
+        <p class="error" *ngIf="invalid('description')">Description is required (max 500 characters).</p>
+      </div>
+      <div class="field">
+        <label for="startAt">Start date &amp; time</label>
+        <input id="startAt" type="datetime-local" class="input" formControlName="startAt" [class.invalid]="invalid('startAt')" />
+      </div>
+      <div class="field">
+        <label for="endAt">End date &amp; time</label>
+        <input id="endAt" type="datetime-local" class="input" formControlName="endAt" [class.invalid]="invalid('endAt') || (form.errors?.['endBeforeStart'])" />
+      </div>
+      <div class="field span-2">
+        <label for="cutoffAt">Registration cut-off (date &amp; time)</label>
+        <input id="cutoffAt" type="datetime-local" class="input" formControlName="cutoffAt" [class.invalid]="invalid('cutoffAt') || (form.errors?.['cutoffAfterStart'])" />
+        <p class="error" *ngIf="form.errors?.['endBeforeStart'] && form.touched">End time must be after the start time.</p>
+        <p class="error" *ngIf="form.errors?.['cutoffAfterStart'] && form.touched">Cut-off must be before the activity starts.</p>
+      </div>
+    </div>
+    <p class="alert" role="alert" *ngIf="serverError">{{ serverError }}</p>
+    <div class="form-actions">
+      <button type="button" class="btn btn--ghost" (click)="formOpen = false">Cancel</button>
+      <button type="submit" class="btn btn--primary" [disabled]="saving">{{ saving ? 'Saving…' : editing ? 'Save changes' : 'Add activity' }}</button>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal *ngIf="deleting" title="Remove NGO activity?" [width]="460" (closed)="deleting = null">
+  <p>Remove <strong>{{ deleting.title }}</strong> ({{ deleting.ngoName }})?</p>
+  <p class="alert alert--info" *ngIf="deleting.registeredCount">
+    {{ deleting.registeredCount }} registered employee{{ deleting.registeredCount > 1 ? 's' : '' }} will be unregistered and notified automatically.
+  </p>
+  <div class="form-actions">
+    <button type="button" class="btn btn--ghost" (click)="deleting = null">Keep</button>
+    <button type="button" class="btn btn--primary" [disabled]="saving" (click)="confirmDelete()">{{ saving ? 'Removing…' : 'Yes, remove' }}</button>
+  </div>
+</app-modal>

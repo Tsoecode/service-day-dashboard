@@ -1,0 +1,468 @@
+[
+  {
+    "id": "r1",
+    "userId": "u13",
+    "activityId": "a1",
+    "registeredHoursAgo": 55
+  },
+  {
+    "id": "r2",
+    "userId": "u10",
+    "activityId": "a1",
+    "registeredHoursAgo": 143
+  },
+  {
+    "id": "r3",
+    "userId": "u3",
+    "activityId": "a1",
+    "registeredHoursAgo": 53
+  },
+  {
+    "id": "r4",
+    "userId": "u11",
+    "activityId": "a1",
+    "registeredHoursAgo": 98
+  },
+  {
+    "id": "r5",
+    "userId": "u5",
+    "activityId": "a1",
+    "registeredHoursAgo": 178
+  },
+  {
+    "id": "r6",
+    "userId": "u6",
+    "activityId": "a1",
+    "registeredHoursAgo": 244
+  },
+  {
+    "id": "r7",
+    "userId": "u8",
+    "activityId": "a1",
+    "registeredHoursAgo": 103
+  },
+  {
+    "id": "r8",
+    "userId": "u12",
+    "activityId": "a1",
+    "registeredHoursAgo": 90
+  },
+  {
+    "id": "r9",
+    "userId": "u15",
+    "activityId": "a1",
+    "registeredHoursAgo": 187
+  },
+  {
+    "id": "r10",
+    "userId": "u1",
+    "activityId": "a2",
+    "registeredHoursAgo": 284
+  },
+  {
+    "id": "r11",
+    "userId": "u13",
+    "activityId": "a2",
+    "registeredHoursAgo": 248
+  },
+  {
+    "id": "r12",
+    "userId": "u15",
+    "activityId": "a2",
+    "registeredHoursAgo": 190
+  },
+  {
+    "id": "r13",
+    "userId": "u12",
+    "activityId": "a2",
+    "registeredHoursAgo": 268
+  },
+  {
+    "id": "r14",
+    "userId": "u8",
+    "activityId": "a2",
+    "registeredHoursAgo": 262
+  },
+  {
+    "id": "r15",
+    "userId": "u7",
+    "activityId": "a2",
+    "registeredHoursAgo": 215
+  },
+  {
+    "id": "r16",
+    "userId": "u5",
+    "activityId": "a2",
+    "registeredHoursAgo": 183
+  },
+  {
+    "id": "r17",
+    "userId": "u6",
+    "activityId": "a2",
+    "registeredHoursAgo": 157
+  },
+  {
+    "id": "r18",
+    "userId": "u4",
+    "activityId": "a2",
+    "registeredHoursAgo": 122
+  },
+  {
+    "id": "r19",
+    "userId": "u10",
+    "activityId": "a2",
+    "registeredHoursAgo": 154
+  },
+  {
+    "id": "r20",
+    "userId": "u2",
+    "activityId": "a2",
+    "registeredHoursAgo": 71
+  },
+  {
+    "id": "r21",
+    "userId": "u3",
+    "activityId": "a2",
+    "registeredHoursAgo": 183
+  },
+  {
+    "id": "r22",
+    "userId": "u11",
+    "activityId": "a2",
+    "registeredHoursAgo": 298
+  },
+  {
+    "id": "r23",
+    "userId": "u14",
+    "activityId": "a2",
+    "registeredHoursAgo": 283
+  },
+  {
+    "id": "r24",
+    "userId": "u14",
+    "activityId": "a3",
+    "registeredHoursAgo": 245
+  },
+  {
+    "id": "r25",
+    "userId": "u7",
+    "activityId": "a3",
+    "registeredHoursAgo": 50
+  },
+  {
+    "id": "r26",
+    "userId": "u3",
+    "activityId": "a3",
+    "registeredHoursAgo": 69
+  },
+  {
+    "id": "r27",
+    "userId": "u13",
+    "activityId": "a3",
+    "registeredHoursAgo": 190
+  },
+  {
+    "id": "r28",
+    "userId": "u4",
+    "activityId": "a3",
+    "registeredHoursAgo": 204
+  },
+  {
+    "id": "r29",
+    "userId": "u11",
+    "activityId": "a3",
+    "registeredHoursAgo": 209
+  },
+  {
+    "id": "r30",
+    "userId": "u9",
+    "activityId": "a3",
+    "registeredHoursAgo": 284
+  },
+  {
+    "id": "r31",
+    "userId": "u2",
+    "activityId": "a3",
+    "registeredHoursAgo": 263
+  },
+  {
+    "id": "r32",
+    "userId": "u10",
+    "activityId": "a3",
+    "registeredHoursAgo": 65
+  },
+  {
+    "id": "r33",
+    "userId": "u5",
+    "activityId": "a3",
+    "registeredHoursAgo": 77
+  },
+  {
+    "id": "r34",
+    "userId": "u8",
+    "activityId": "a3",
+    "registeredHoursAgo": 168
+  },
+  {
+    "id": "r35",
+    "userId": "u7",
+    "activityId": "a4",
+    "registeredHoursAgo": 116
+  },
+  {
+    "id": "r36",
+    "userId": "u9",
+    "activityId": "a4",
+    "registeredHoursAgo": 89
+  },
+  {
+    "id": "r37",
+    "userId": "u14",
+    "activityId": "a4",
+    "registeredHoursAgo": 282
+  },
+  {
+    "id": "r38",
+    "userId": "u13",
+    "activityId": "a4",
+    "registeredHoursAgo": 60
+  },
+  {
+    "id": "r39",
+    "userId": "u3",
+    "activityId": "a4",
+    "registeredHoursAgo": 141
+  },
+  {
+    "id": "r40",
+    "userId": "u4",
+    "activityId": "a4",
+    "registeredHoursAgo": 177
+  },
+  {
+    "id": "r41",
+    "userId": "u6",
+    "activityId": "a4",
+    "registeredHoursAgo": 96
+  },
+  {
+    "id": "r42",
+    "userId": "u10",
+    "activityId": "a4",
+    "registeredHoursAgo": 156
+  },
+  {
+    "id": "r43",
+    "userId": "u9",
+    "activityId": "a5",
+    "registeredHoursAgo": 213
+  },
+  {
+    "id": "r44",
+    "userId": "u6",
+    "activityId": "a5",
+    "registeredHoursAgo": 224
+  },
+  {
+    "id": "r45",
+    "userId": "u11",
+    "activityId": "a5",
+    "registeredHoursAgo": 148
+  },
+  {
+    "id": "r46",
+    "userId": "u10",
+    "activityId": "a5",
+    "registeredHoursAgo": 107
+  },
+  {
+    "id": "r47",
+    "userId": "u4",
+    "activityId": "a5",
+    "registeredHoursAgo": 72
+  },
+  {
+    "id": "r48",
+    "userId": "u12",
+    "activityId": "a5",
+    "registeredHoursAgo": 120
+  },
+  {
+    "id": "r49",
+    "userId": "u6",
+    "activityId": "a6",
+    "registeredHoursAgo": 193,
+    "checkedInMinutesAfterStart": 37
+  },
+  {
+    "id": "r50",
+    "userId": "u10",
+    "activityId": "a6",
+    "registeredHoursAgo": 57
+  },
+  {
+    "id": "r51",
+    "userId": "u7",
+    "activityId": "a6",
+    "registeredHoursAgo": 230
+  },
+  {
+    "id": "r52",
+    "userId": "u12",
+    "activityId": "a6",
+    "registeredHoursAgo": 231
+  },
+  {
+    "id": "r53",
+    "userId": "u2",
+    "activityId": "a6",
+    "registeredHoursAgo": 235
+  },
+  {
+    "id": "r54",
+    "userId": "u13",
+    "activityId": "a6",
+    "registeredHoursAgo": 64,
+    "checkedInMinutesAfterStart": 33
+  },
+  {
+    "id": "r55",
+    "userId": "u9",
+    "activityId": "a6",
+    "registeredHoursAgo": 113
+  },
+  {
+    "id": "r56",
+    "userId": "u5",
+    "activityId": "a6",
+    "registeredHoursAgo": 56
+  },
+  {
+    "id": "r57",
+    "userId": "u14",
+    "activityId": "a7",
+    "registeredHoursAgo": 207
+  },
+  {
+    "id": "r58",
+    "userId": "u11",
+    "activityId": "a7",
+    "registeredHoursAgo": 216
+  },
+  {
+    "id": "r59",
+    "userId": "u13",
+    "activityId": "a7",
+    "registeredHoursAgo": 272
+  },
+  {
+    "id": "r60",
+    "userId": "u4",
+    "activityId": "a7",
+    "registeredHoursAgo": 92
+  },
+  {
+    "id": "r61",
+    "userId": "u4",
+    "activityId": "a8",
+    "registeredHoursAgo": 294,
+    "checkedInMinutesAfterStart": null
+  },
+  {
+    "id": "r62",
+    "userId": "u6",
+    "activityId": "a8",
+    "registeredHoursAgo": 300,
+    "checkedInMinutesAfterStart": 17
+  },
+  {
+    "id": "r63",
+    "userId": "u7",
+    "activityId": "a8",
+    "registeredHoursAgo": 43,
+    "checkedInMinutesAfterStart": 4
+  },
+  {
+    "id": "r64",
+    "userId": "u9",
+    "activityId": "a8",
+    "registeredHoursAgo": 76,
+    "checkedInMinutesAfterStart": 3
+  },
+  {
+    "id": "r65",
+    "userId": "u3",
+    "activityId": "a8",
+    "registeredHoursAgo": 295,
+    "checkedInMinutesAfterStart": 0
+  },
+  {
+    "id": "r66",
+    "userId": "u10",
+    "activityId": "a8",
+    "registeredHoursAgo": 212,
+    "checkedInMinutesAfterStart": 12
+  },
+  {
+    "id": "r67",
+    "userId": "u15",
+    "activityId": "a8",
+    "registeredHoursAgo": 287,
+    "checkedInMinutesAfterStart": 2
+  },
+  {
+    "id": "r68",
+    "userId": "u5",
+    "activityId": "a8",
+    "registeredHoursAgo": 129,
+    "checkedInMinutesAfterStart": 21
+  },
+  {
+    "id": "r69",
+    "userId": "u11",
+    "activityId": "a8",
+    "registeredHoursAgo": 235,
+    "checkedInMinutesAfterStart": 2
+  },
+  {
+    "id": "r70",
+    "userId": "u12",
+    "activityId": "a8",
+    "registeredHoursAgo": 132,
+    "checkedInMinutesAfterStart": 6
+  },
+  {
+    "id": "r71",
+    "userId": "u13",
+    "activityId": "a8",
+    "registeredHoursAgo": 44,
+    "checkedInMinutesAfterStart": 20
+  },
+  {
+    "id": "r72",
+    "userId": "u8",
+    "activityId": "a8",
+    "registeredHoursAgo": 173,
+    "checkedInMinutesAfterStart": 1
+  },
+  {
+    "id": "r73",
+    "userId": "u14",
+    "activityId": "a8",
+    "registeredHoursAgo": 206,
+    "checkedInMinutesAfterStart": 24
+  },
+  {
+    "id": "r74",
+    "userId": "u2",
+    "activityId": "a8",
+    "registeredHoursAgo": 208,
+    "checkedInMinutesAfterStart": 6
+  },
+  {
+    "id": "r900",
+    "userId": "u1",
+    "activityId": "a6",
+    "registeredHoursAgo": 100
+  }
+]

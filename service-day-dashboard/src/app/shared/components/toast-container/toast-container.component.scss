@@ -1,0 +1,8 @@
+.toasts { position: fixed; top: 16px; right: 16px; z-index: 200; display: flex; flex-direction: column; gap: 10px; width: min(380px, calc(100vw - 32px)); }
+.toast {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #fff; font-size: 14px;
+  box-shadow: 0 10px 30px rgba(30, 20, 100, 0.18); border-left: 4px solid var(--primary);
+  span { flex: 1; }
+  &[data-type='success'] { border-color: #12b76a; > app-icon { color: #12b76a; } }
+  &[data-type='error'] { border-color: #f04438; > app-icon { color: #f04438; } }
+}

@@ -1,0 +1,54 @@
+<div class="frame" [class.frame--open]="menuOpen">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <a class="brand" [routerLink]="nav[0].link">
+      <span class="brand__mark"><app-icon name="heart"></app-icon></span>
+      <span class="brand__name">Service Day<small>CSR dashboard</small></span>
+    </a>
+
+    <nav class="menu">
+      <a *ngFor="let item of nav" class="menu__item" [routerLink]="item.link" routerLinkActive="is-active">
+        <app-icon [name]="item.icon"></app-icon>
+        <span>{{ item.label }}</span>
+        <span class="menu__badge" *ngIf="item.label === 'Notifications' && user.role === 'employee' && (unread$ | async) as n">{{ n }}</span>
+      </a>
+    </nav>
+
+    <section class="profile">
+      <div class="profile__who">
+        <span class="avatar">{{ initials }}</span>
+        <div>
+          <strong>{{ user.name }}</strong>
+          <small>{{ user.jobTitle }}</small>
+        </div>
+      </div>
+      <button type="button" class="btn btn--light profile__logout" (click)="logout()">
+        <app-icon name="logout"></app-icon>Logout
+      </button>
+    </section>
+  </aside>
+
+  <div class="scrim" (click)="menuOpen = false"></div>
+
+  <div class="content">
+    <header class="topbar">
+      <button type="button" class="icon-btn topbar__menu" aria-label="Open menu" aria-controls="sidebar" [attr.aria-expanded]="menuOpen" (click)="menuOpen = !menuOpen">
+        <app-icon name="menu"></app-icon>
+      </button>
+      <h1 class="topbar__title">
+        <ng-container *ngIf="isDashboard; else plain">Hello {{ firstName }} <span aria-hidden="true">👋</span>,</ng-container>
+        <ng-template #plain>{{ title }}</ng-template>
+      </h1>
+      <label class="search" *ngIf="showSearch">
+        <app-icon name="search"></app-icon>
+        <input type="search" placeholder="Search activities…" aria-label="Search" (input)="onSearch($event)" />
+      </label>
+      <a class="icon-btn topbar__bell" *ngIf="user.role === 'employee'" [routerLink]="notificationsLink" aria-label="Notifications">
+        <app-icon name="bell"></app-icon>
+        <span class="dot" *ngIf="(unread$ | async) as n">{{ n }}</span>
+      </a>
+    </header>
+
+    <main class="page"><router-outlet></router-outlet></main>
+  </div>
+</div>
+<app-toast-container></app-toast-container>

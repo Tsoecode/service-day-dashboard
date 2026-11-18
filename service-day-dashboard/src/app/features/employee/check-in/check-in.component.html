@@ -1,0 +1,45 @@
+<div class="split split--even">
+  <section class="card" aria-labelledby="ci">
+    <h2 class="card__title" id="ci">Check in with QR code</h2>
+    <p class="card__sub">Scan the QR code displayed at your activity, or type the code printed under it. Check-in opens 1 hour before the activity starts.</p>
+
+    <form class="ci-form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="code">Activity code</label>
+        <input id="code" name="code" class="input" [(ngModel)]="code" placeholder="e.g. SDQR-A6-XXXXXX" autocomplete="off" />
+      </div>
+      <div class="row">
+        <button type="submit" class="btn btn--primary" [disabled]="busy"><app-icon name="check"></app-icon>{{ busy ? 'Checking in…' : 'Check in' }}</button>
+        <button type="button" class="btn btn--ghost" *ngIf="cameraSupported && !scanning" (click)="startCamera()"><app-icon name="camera"></app-icon>Scan with camera</button>
+        <button type="button" class="btn btn--ghost" *ngIf="scanning" (click)="stopCamera()">Stop camera</button>
+      </div>
+    </form>
+
+    <video #video class="cam" *ngIf="scanning" playsinline muted aria-label="Camera preview for scanning the QR code"></video>
+    <p class="alert" role="alert" *ngIf="error">{{ error }}</p>
+
+    <div class="success" *ngIf="result" role="status">
+      <app-icon name="check"></app-icon>
+      <div>
+        <strong>Checked in to {{ result.activity.title }}</strong>
+        <p>{{ result.activity.ngoName }} · arrival recorded at {{ result.registration.checkedInAt | date: 'h:mm:ss a, d MMM y' }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="td">
+    <h2 class="card__title" id="td">Your activities around today</h2>
+    <p class="card__sub">Registered activities starting within the next or last 24 hours</p>
+    <ul class="today" *ngIf="mine$ | async as list">
+      <li *ngFor="let x of list">
+        <div>
+          <strong>{{ x.activity.title }}</strong>
+          <small>{{ x.activity.ngoName }} · {{ x.activity.startAt | date: 'EEE d MMM, h:mm a' }}</small>
+        </div>
+        <span class="chip chip--ok" *ngIf="x.reg.checkedInAt; else pending">Checked in {{ x.reg.checkedInAt | date: 'h:mm a' }}</span>
+        <ng-template #pending><span class="badge" data-status="closed">Not checked in</span></ng-template>
+      </li>
+      <li class="empty" *ngIf="!list.length">No registered activity is happening around today.</li>
+    </ul>
+  </section>
+</div>
