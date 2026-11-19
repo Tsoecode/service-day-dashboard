@@ -10,7 +10,12 @@
         <thead><tr><th>NGO / Activity</th><th>Schedule</th><th>Location</th><th>Slots</th><th>Cut-off</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
         <tbody>
           <tr *ngFor="let a of vm.rows; trackBy: trackById">
-            <td data-label="NGO / Activity"><span class="title">{{ a.ngoName }}</span><span class="sub">{{ a.title }} · {{ a.serviceType }}</span></td>
+            <td data-label="NGO / Activity">
+              <div class="activity-cell">
+                <img *ngIf="a.imageUrl" class="activity-thumb" [src]="a.imageUrl" [alt]="a.title" />
+                <span><span class="title">{{ a.ngoName }}</span><span class="sub">{{ a.title }} · {{ a.serviceType }}</span></span>
+              </div>
+            </td>
             <td data-label="Schedule">{{ a.startAt | date: 'd MMM y' }}<br /><span class="sub">{{ a.startAt | date: 'h:mm a' }} – {{ a.endAt | date: 'h:mm a' }}</span></td>
             <td data-label="Location">{{ a.location }}</td>
             <td data-label="Slots"><strong>{{ a.registeredCount }}</strong> / {{ a.maxParticipants }}</td>
@@ -56,6 +61,15 @@
         <label for="maxParticipants">Maximum employees</label>
         <input id="maxParticipants" type="number" min="1" class="input" formControlName="maxParticipants" [class.invalid]="invalid('maxParticipants')" />
         <p class="error" *ngIf="invalid('maxParticipants')">Enter a number between 1 and 1000.</p>
+      </div>
+      <div class="field span-2">
+        <label for="activityImage">Activity image <span class="sub">(optional, max 1 MB)</span></label>
+        <input id="activityImage" class="input" type="file" accept="image/*" (change)="onImageSelected($event)" />
+        <div class="image-preview" *ngIf="form.controls.imageUrl.value as imageUrl">
+          <img [src]="imageUrl" alt="Activity preview" />
+          <button type="button" class="btn btn--ghost btn--sm" (click)="removeImage()">Remove image</button>
+        </div>
+        <p class="sub">Images automatically fit the activity card whether they are portrait or landscape.</p>
       </div>
       <div class="field span-2">
         <label for="location">Location</label>

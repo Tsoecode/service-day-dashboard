@@ -1,4 +1,5 @@
 .ngo { margin: 0 0 8px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.activity-image { display: block; width: 100%; max-height: 360px; object-fit: contain; border-radius: 10px; background: #f3f4f6; margin-bottom: 16px; }
 .desc { margin: 0 0 16px; }
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 16px;
   dt { font-size: 11px; color: var(--muted); } dd { margin: 2px 0 0; font-size: 13px; font-weight: 500; small { color: var(--muted); } } }

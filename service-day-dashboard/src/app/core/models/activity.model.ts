@@ -7,6 +7,7 @@ export interface Activity {
   title: string;
   serviceType: string;
   description: string;
+  imageUrl?: string | null;
   location: string;
   startAt: string;
   endAt: string;

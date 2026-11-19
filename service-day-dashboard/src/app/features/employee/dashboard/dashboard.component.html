@@ -30,7 +30,12 @@
           <thead><tr><th>Activity</th><th>Date</th><th>Location</th><th>Slots left</th><th>Cut-off</th><th><span class="sr-only">Action</span></th></tr></thead>
           <tbody>
             <tr *ngFor="let a of vm.rows; trackBy: trackById">
-              <td data-label="Activity"><span class="title">{{ a.title }}</span><span class="sub">{{ a.ngoName }}</span></td>
+              <td data-label="Activity">
+                <div class="activity-cell">
+                  <img *ngIf="a.imageUrl" class="activity-thumb" [src]="a.imageUrl" [alt]="a.title" />
+                  <span><span class="title">{{ a.title }}</span><span class="sub">{{ a.ngoName }}</span></span>
+                </div>
+              </td>
               <td data-label="Date">{{ a.startAt | date: 'd MMM y, h:mm a' }}</td>
               <td data-label="Location">{{ a.location }}</td>
               <td data-label="Slots left"><strong>{{ a.maxParticipants - a.registeredCount }}</strong> / {{ a.maxParticipants }}</td>

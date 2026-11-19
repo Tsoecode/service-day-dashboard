@@ -7,7 +7,10 @@ import { BarDatum } from '../../../shared/components/bar-chart/bar-chart.compone
 @Component({
   standalone: false,
   selector: 'app-admin-dashboard',
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
+  styles: [`.admin-activity-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .admin-activity-thumb { display: block; width: 64px; height: 48px; flex: 0 0 auto; object-fit: cover; border-radius: 6px; background: #f3f4f6; }
+    @media (max-width: 520px) { .admin-activity-thumb { width: 52px; height: 40px; } }`]
 })
 export class AdminDashboardComponent {
   readonly utilisation = utilisation;

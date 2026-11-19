@@ -1,1 +1,4 @@
 .stats app-stat-card { display: block; }
+.activity-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.activity-thumb { display: block; width: 64px; height: 48px; flex: 0 0 auto; object-fit: cover; border-radius: 6px; background: #f3f4f6; }
+@media (max-width: 520px) { .activity-thumb { width: 52px; height: 40px; } }

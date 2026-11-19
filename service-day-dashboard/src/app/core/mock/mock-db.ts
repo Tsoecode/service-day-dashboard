@@ -4,7 +4,7 @@ export interface DbUser {
   role: 'admin' | 'employee'; department: string; jobTitle: string;
 }
 export interface DbActivity {
-  id: string; ngoName: string; title: string; serviceType: string; description: string;
+  id: string; ngoName: string; title: string; serviceType: string; description: string; imageUrl?: string | null;
   location: string; startAt: string; endAt: string; cutoffAt: string; maxParticipants: number;
   qrToken: string | null; createdAt: string;
 }

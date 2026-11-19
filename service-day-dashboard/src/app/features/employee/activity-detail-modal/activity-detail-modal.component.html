@@ -1,5 +1,6 @@
 <app-modal [title]="activity.title" (closed)="closed.emit()">
   <p class="ngo">{{ activity.ngoName }} · <app-status-badge [status]="status"></app-status-badge></p>
+  <img *ngIf="activity.imageUrl" class="activity-image" [src]="activity.imageUrl" [alt]="activity.title" />
   <p class="desc">{{ activity.description }}</p>
   <dl class="facts">
     <div><dt>Service type</dt><dd>{{ activity.serviceType }}</dd></div>

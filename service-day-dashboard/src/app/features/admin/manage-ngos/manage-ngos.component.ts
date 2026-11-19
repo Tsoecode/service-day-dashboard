@@ -18,7 +18,8 @@ function scheduleValidator(group: AbstractControl): ValidationErrors | null {
 @Component({
   standalone: false,
   selector: 'app-manage-ngos',
-  templateUrl: './manage-ngos.component.html'
+  templateUrl: './manage-ngos.component.html',
+  styleUrl: './manage-ngos.component.scss'
 })
 export class ManageNgosComponent {
   readonly types = SERVICE_TYPES;
@@ -34,6 +35,7 @@ export class ManageNgosComponent {
     title: ['', [Validators.required, Validators.maxLength(100)]],
     serviceType: ['', Validators.required],
     description: ['', [Validators.required, Validators.maxLength(500)]],
+    imageUrl: [''],
     location: ['', Validators.required],
     startAt: ['', Validators.required],
     endAt: ['', Validators.required],
@@ -58,6 +60,33 @@ export class ManageNgosComponent {
     return c.invalid && (c.touched || c.dirty);
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      this.serverError = 'Choose an image file.';
+      input.value = '';
+      return;
+    }
+    if (file.size > 1024 * 1024) {
+      this.serverError = 'Image must be 1 MB or smaller.';
+      input.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.form.controls.imageUrl.setValue(String(reader.result));
+      this.serverError = '';
+    };
+    reader.onerror = () => { this.serverError = 'Unable to read this image.'; };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage(): void {
+    this.form.controls.imageUrl.setValue('');
+  }
+
   openCreate(): void {
     this.editing = null;
     this.serverError = '';
@@ -66,7 +95,7 @@ export class ManageNgosComponent {
     const end = new Date(start.getTime() + 4 * 3600_000);
     const cutoff = new Date(start.getTime() - 3 * 86400_000);
     this.form.reset({
-      ngoName: '', title: '', serviceType: '', description: '', location: '', maxParticipants: 10,
+      ngoName: '', title: '', serviceType: '', description: '', imageUrl: '', location: '', maxParticipants: 10,
       startAt: toLocalInput(start.toISOString()), endAt: toLocalInput(end.toISOString()), cutoffAt: toLocalInput(cutoff.toISOString())
     });
     this.formOpen = true;
@@ -76,7 +105,7 @@ export class ManageNgosComponent {
     this.editing = a;
     this.serverError = '';
     this.form.reset({
-      ngoName: a.ngoName, title: a.title, serviceType: a.serviceType, description: a.description, location: a.location,
+      ngoName: a.ngoName, title: a.title, serviceType: a.serviceType, description: a.description, imageUrl: a.imageUrl ?? '', location: a.location,
       startAt: toLocalInput(a.startAt), endAt: toLocalInput(a.endAt), cutoffAt: toLocalInput(a.cutoffAt), maxParticipants: a.maxParticipants
     });
     this.formOpen = true;
@@ -88,6 +117,7 @@ export class ManageNgosComponent {
     const v = this.form.getRawValue();
     const input: ActivityInput = {
       ...v,
+      imageUrl: v.imageUrl || null,
       startAt: new Date(v.startAt).toISOString(),
       endAt: new Date(v.endAt).toISOString(),
       cutoffAt: new Date(v.cutoffAt).toISOString()

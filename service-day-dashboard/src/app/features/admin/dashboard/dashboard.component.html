@@ -31,7 +31,12 @@
           <thead><tr><th>Activity</th><th>Date</th><th>Slots</th><th>Utilisation</th><th>Status</th></tr></thead>
           <tbody>
             <tr *ngFor="let a of vm.rows">
-              <td data-label="Activity"><span class="title">{{ a.title }}</span><span class="sub">{{ a.ngoName }}</span></td>
+              <td data-label="Activity">
+                <div class="admin-activity-cell">
+                  <img *ngIf="a.imageUrl" class="admin-activity-thumb" [src]="a.imageUrl" [alt]="a.title" />
+                  <span><span class="title">{{ a.title }}</span><span class="sub">{{ a.ngoName }}</span></span>
+                </div>
+              </td>
               <td data-label="Date">{{ a.startAt | date: 'd MMM y, h:mm a' }}</td>
               <td data-label="Slots"><strong>{{ a.registeredCount }}</strong> / {{ a.maxParticipants }}</td>
               <td data-label="Utilisation">{{ utilisation(a) }}%</td>

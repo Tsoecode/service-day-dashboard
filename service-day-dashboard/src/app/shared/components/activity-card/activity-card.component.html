@@ -1,4 +1,5 @@
 <article class="act">
+  <img *ngIf="activity.imageUrl" class="act__image" [src]="activity.imageUrl" [alt]="activity.title" />
   <header class="act__head">
     <span class="act__type">{{ activity.serviceType }}</span>
     <app-status-badge [status]="status"></app-status-badge>

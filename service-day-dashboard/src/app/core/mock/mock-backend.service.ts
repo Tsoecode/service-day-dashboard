@@ -68,7 +68,7 @@ export class MockBackendService {
         const iso = (ms: number) => new Date(ms).toISOString();
         const activities: DbActivity[] = seed.activities.map(a => ({
           id: a.id, ngoName: a.ngoName, title: a.title, serviceType: a.serviceType,
-          description: a.description, location: a.location,
+          description: a.description, imageUrl: a.imageUrl ?? null, location: a.location,
           startAt: iso(now + a.startsInHours * HOUR),
           endAt: iso(now + (a.startsInHours + a.durationHours) * HOUR),
           cutoffAt: iso(now + a.cutoffInHours * HOUR),
@@ -202,7 +202,7 @@ export class MockBackendService {
       this.validateActivity(body);
       const a: DbActivity = {
         id: this.nextId(db, 'a'), ngoName: body.ngoName.trim(), title: body.title.trim(), serviceType: body.serviceType,
-        description: body.description.trim(), location: body.location.trim(), startAt: body.startAt, endAt: body.endAt,
+        description: body.description.trim(), imageUrl: body.imageUrl || null, location: body.location.trim(), startAt: body.startAt, endAt: body.endAt,
         cutoffAt: body.cutoffAt, maxParticipants: +body.maxParticipants, qrToken: null, createdAt: new Date().toISOString()
       };
       db.activities.push(a);
@@ -217,7 +217,8 @@ export class MockBackendService {
         .some(k => String(a[k]) !== String(body[k]));
       Object.assign(a, {
         ngoName: body.ngoName.trim(), title: body.title.trim(), serviceType: body.serviceType, description: body.description.trim(),
-        location: body.location.trim(), startAt: body.startAt, endAt: body.endAt, cutoffAt: body.cutoffAt, maxParticipants: +body.maxParticipants
+        location: body.location.trim(), startAt: body.startAt, endAt: body.endAt, cutoffAt: body.cutoffAt, maxParticipants: +body.maxParticipants,
+        imageUrl: body.imageUrl || null
       });
       if (changed) this.notifyRegistered(db, a, 'update', 'Activity updated', `Details for "${a.title}" have changed. Please review the new schedule, location and cut-off time.`);
       this.checkLastSlots(db, a);
