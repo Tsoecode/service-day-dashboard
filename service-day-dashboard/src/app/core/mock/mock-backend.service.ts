@@ -49,6 +49,7 @@ export class MockBackendService {
     if (saved) {
       try {
         this.db = JSON.parse(saved) as Db;
+        this.db.users.forEach(user => { user.status = user.status ?? 'approved'; });
         return of(this.db);
       } catch { /* corrupted -> reseed */ }
     }
@@ -117,15 +118,33 @@ export class MockBackendService {
     const body = (req.body ?? {}) as any;
     const method = req.method;
 
-    if (seg[0] === 'auth' && seg[1] === 'login' && method === 'POST') return this.login(db, body);
+    if (seg[0] === 'auth' && seg[1] === 'login' && method === 'POST') return this.login(db, body, 'employee');
+    if (seg[0] === 'auth' && seg[1] === 'admin-login' && method === 'POST') return this.login(db, body, 'admin');
+    if (seg[0] === 'auth' && seg[1] === 'register' && method === 'POST') return this.register(db, body);
     if (seg[0] === 'reset' && method === 'POST') { localStorage.removeItem(STORAGE_KEY); this.db = null; return { ok: true }; }
 
     const me = this.currentUser(db, req);
     this.runScheduler(db);
+    if (me.status === 'unapproved' && !(method === 'GET' && ['activities', 'registrations'].includes(seg[0]))) {
+      throw new ApiError(403, 'Your account is read-only until an administrator approves it.');
+    }
+
+    if (seg[0] === 'users' && seg[1] === 'pending' && method === 'GET') {
+      this.requireAdmin(me);
+      return db.users.filter(u => u.role === 'employee' && u.status === 'unapproved').map(u => this.publicUser(u));
+    }
+    if (seg[0] === 'users' && seg[2] === 'approve' && method === 'POST') {
+      this.requireAdmin(me);
+      const user = db.users.find(u => u.id === seg[1] && u.role === 'employee');
+      if (!user) throw new ApiError(404, 'User not found.');
+      user.status = 'approved';
+      return this.publicUser(user);
+    }
 
     switch (seg[0]) {
       case 'users':
-        return db.users.filter(u => u.role === 'employee').map(u => this.publicUser(u));
+        this.requireAdmin(me);
+        return db.users.filter(u => u.role === 'employee' && u.status === 'approved').map(u => this.publicUser(u));
       case 'activities':
         return this.activitiesRoute(db, me, method, seg, body);
       case 'registrations':
@@ -146,13 +165,30 @@ export class MockBackendService {
   // ---------------------------------------------------------------- auth
   private publicUser(u: DbUser) {
     const { password, ...rest } = u;
-    return rest;
+    return { ...rest, status: u.status ?? 'approved' };
   }
 
-  private login(db: Db, body: any) {
+  private register(db: Db, body: any) {
+    const name = String(body.name ?? '').trim();
     const email = String(body.email ?? '').trim().toLowerCase();
-    const user = db.users.find(u => u.email.toLowerCase() === email && u.password === body.password);
+    const password = String(body.password ?? '');
+    const department = String(body.department ?? '').trim();
+    const jobTitle = String(body.jobTitle ?? '').trim();
+    if (!name || !email || !password || !department || !jobTitle) throw new ApiError(400, 'Complete all registration fields.');
+    if (password.length < 6) throw new ApiError(400, 'Password must be at least 6 characters.');
+    if (db.users.some(u => u.email.toLowerCase() === email)) throw new ApiError(409, 'An account with this email already exists.');
+    const user: DbUser = {
+      id: this.nextId(db, 'u'), name, email, password, role: 'employee', status: 'unapproved', department, jobTitle
+    };
+    db.users.push(user);
+    return this.publicUser(user);
+  }
+
+  private login(db: Db, body: any, role: 'admin' | 'employee') {
+    const email = String(body.email ?? '').trim().toLowerCase();
+    const user = db.users.find(u => u.email.toLowerCase() === email && u.password === body.password && u.role === role);
     if (!user) throw new ApiError(401, 'Invalid email or password.');
+    if (user.status === 'unapproved') throw new ApiError(403, 'Your account is awaiting administrator approval.');
     return { user: this.publicUser(user), token: `mock.${user.id}` };
   }
 
@@ -280,6 +316,7 @@ export class MockBackendService {
       return list.map(r => this.viewRegistration(db, r));
     }
     if (me.role === 'admin') throw new ApiError(403, 'Only employees can register for activities.');
+    if (me.status === 'unapproved' && method !== 'GET') throw new ApiError(403, 'Your account is read-only until an administrator approves it.');
 
     if (method === 'POST') {
       const a = this.findActivity(db, body.activityId);
@@ -329,7 +366,7 @@ export class MockBackendService {
 
   // ---------------------------------------------------------------- check-in
   private checkIn(db: Db, me: DbUser, body: any) {
-    if (me.role !== 'employee') throw new ApiError(403, 'Only employees can check in.');
+    if (me.role !== 'employee' || me.status === 'unapproved') throw new ApiError(403, 'Only approved employees can check in.');
     const code = String(body.code ?? '').trim();
     if (!code) throw new ApiError(400, 'Enter or scan a QR code.');
     const a = db.activities.find(x => x.qrToken === code);

@@ -15,6 +15,14 @@ export const roleGuard: CanActivateFn = route => {
   return auth.user?.role === role ? true : inject(Router).createUrlTree([auth.isLoggedIn ? auth.homeRoute : '/login']);
 };
 
+/** Pending users can browse opportunities but cannot enter employee tools. */
+export const approvedEmployeeGuard: CanActivateFn = route => {
+  const user = inject(AuthService).user;
+  return user?.status !== 'unapproved' || route.routeConfig?.path === 'opportunities'
+    ? true
+    : inject(Router).createUrlTree(['/employee/opportunities']);
+};
+
 /** Already signed-in users skip the login page. */
 export const guestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);

@@ -17,6 +17,7 @@ const NAV: Record<Role, NavItem[]> = {
   admin: [
     { label: 'Dashboard', icon: 'grid', link: '/admin/dashboard' },
     { label: 'Manage NGOs', icon: 'heart', link: '/admin/ngos' },
+    { label: 'User Approvals', icon: 'users', link: '/admin/user-approvals' },
     { label: 'Participation', icon: 'users', link: '/admin/participation' },
     { label: 'Notifications', icon: 'megaphone', link: '/admin/notifications' },
     { label: 'Check-in & Reports', icon: 'qr', link: '/admin/check-in' }
@@ -32,7 +33,9 @@ const NAV: Record<Role, NavItem[]> = {
 })
 export class ShellComponent implements OnDestroy {
   readonly user = this.auth.user!;
-  readonly nav = NAV[this.user.role];
+  readonly nav = this.user.status === 'unapproved'
+    ? NAV.employee.filter(item => item.label === 'Opportunities')
+    : NAV[this.user.role];
   readonly firstName = this.user.name.split(' ')[0];
   readonly initials = this.user.name.split(' ').map(p => p[0]).slice(0, 2).join('');
   readonly unread$ = this.notifications.unreadCount$;

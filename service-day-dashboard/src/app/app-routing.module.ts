@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard, guestGuard, homeGuard, roleGuard } from './core/guards/auth.guards';
+import { approvedEmployeeGuard, authGuard, guestGuard, homeGuard, roleGuard } from './core/guards/auth.guards';
 import { ShellComponent } from './layout/shell/shell.component';
 
 const routes: Routes = [

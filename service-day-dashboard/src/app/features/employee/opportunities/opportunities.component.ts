@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { Activity, SERVICE_TYPES, getStatus } from '../../../core/models';
+import { AuthService } from '../../../core/services';
 import { ActivityService, ClockService, RegistrationService, SearchService } from '../../../core/services';
 import { RegistrationFlow } from '../services/registration-flow.service';
 
@@ -15,6 +16,7 @@ export class OpportunitiesComponent {
   readonly availability$ = new BehaviorSubject<'all' | 'open'>('open');
   selected: Activity | null = null;
   busy = false;
+  readonly readOnly: boolean;
 
   readonly vm$ = combineLatest([
     this.activities.activities$, this.registrations.registrations$, this.clock.now$, this.search.term$, this.type$, this.availability$
@@ -32,8 +34,8 @@ export class OpportunitiesComponent {
 
   constructor(
     private activities: ActivityService, private registrations: RegistrationService, private clock: ClockService,
-    private search: SearchService, private flow: RegistrationFlow
-  ) {}
+    private search: SearchService, private flow: RegistrationFlow, auth: AuthService
+  ) { this.readOnly = auth.user?.status === 'unapproved'; }
 
   confirm(activity: Activity): void {
     this.busy = true;

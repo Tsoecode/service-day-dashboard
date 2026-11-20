@@ -11,6 +11,7 @@ export class ActivityDetailModalComponent {
   @Input({ required: true }) activity!: Activity;
   @Input() registered = false;
   @Input() busy = false;
+  @Input() readOnly = false;
   @Input() now = Date.now();
   @Output() confirm = new EventEmitter<Activity>();
   @Output() closed = new EventEmitter<void>();
@@ -18,5 +19,5 @@ export class ActivityDetailModalComponent {
   get status() { return getStatus(this.activity, this.now); }
   get left() { return slotsLeft(this.activity); }
   get cutoffText() { return timeUntil(this.activity.cutoffAt, this.now); }
-  get canRegister() { return this.status === 'open' && !this.registered; }
+  get canRegister() { return !this.readOnly && this.status === 'open' && !this.registered; }
 }

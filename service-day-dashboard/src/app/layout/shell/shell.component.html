@@ -1,4 +1,4 @@
-<div class="frame" [class.frame--open]="menuOpen">
+<div class="frame" [class.frame--open]="menuOpen" [class.frame--employee]="user.role === 'employee'">
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
     <a class="brand" [routerLink]="nav[0].link">
       <span class="brand__mark"><app-icon name="heart"></app-icon></span>
@@ -18,7 +18,7 @@
         <span class="avatar">{{ initials }}</span>
         <div>
           <strong>{{ user.name }}</strong>
-          <small>{{ user.jobTitle }}</small>
+          <small>{{ user.status === 'unapproved' ? 'Pending approval' : user.jobTitle }}</small>
         </div>
       </div>
       <button type="button" class="btn btn--light profile__logout" (click)="logout()">
@@ -48,7 +48,10 @@
       </a>
     </header>
 
-    <main class="page"><router-outlet></router-outlet></main>
+    <main class="page">
+      <div class="card" *ngIf="user.status === 'unapproved'" role="status">Your account is awaiting administrator approval. You can browse opportunities, but cannot register or access employee tools until approved.</div>
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>
 <app-toast-container></app-toast-container>

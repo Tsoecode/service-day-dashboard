@@ -7,6 +7,7 @@
       <app-stat-card label="Unread notifications" [value]="vm.unread" hint="Reminders & updates" icon="bell" tone="pink"></app-stat-card>
     </section>
 
+    @defer (on viewport) {
     <div class="split">
       <section class="card" aria-labelledby="ov">
         <div class="card__head">
@@ -52,6 +53,9 @@
         <p class="empty" *ngIf="!vm.rows.length">No activities match your search.</p>
       </div>
     </section>
+    } @placeholder {
+      <section class="card" aria-label="Dashboard charts and activities loading"><p class="empty">Scroll to load charts and activities.</p></section>
+    }
   </div>
 
   <app-activity-detail-modal *ngIf="selected" [activity]="selected" [now]="vm.now" [busy]="busy"

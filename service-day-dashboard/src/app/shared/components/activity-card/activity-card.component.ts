@@ -13,6 +13,7 @@ export class ActivityCardComponent {
   @Input({ required: true }) activity!: Activity;
   @Input() now = Date.now();
   @Input() registered = false;
+  @Input() readOnly = false;
   @Output() register = new EventEmitter<Activity>();
   @Output() details = new EventEmitter<Activity>();
 
@@ -20,5 +21,5 @@ export class ActivityCardComponent {
   get left() { return slotsLeft(this.activity); }
   get percent() { return utilisation(this.activity); }
   get cutoffText() { return timeUntil(this.activity.cutoffAt, this.now); }
-  get canRegister() { return this.status === 'open' && !this.registered; }
+  get canRegister() { return !this.readOnly && this.status === 'open' && !this.registered; }
 }

@@ -1,7 +1,7 @@
 /** Raw shapes stored by the mock back-end (what a real database would hold). */
 export interface DbUser {
   id: string; name: string; email: string; password: string;
-  role: 'admin' | 'employee'; department: string; jobTitle: string;
+  role: 'admin' | 'employee'; status: 'approved' | 'unapproved'; department: string; jobTitle: string;
 }
 export interface DbActivity {
   id: string; ngoName: string; title: string; serviceType: string; description: string; imageUrl?: string | null;

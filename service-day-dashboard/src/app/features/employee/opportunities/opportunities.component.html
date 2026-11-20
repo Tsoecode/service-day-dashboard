@@ -20,13 +20,13 @@
 
     <div class="cards" *ngIf="vm.list.length; else none">
       <div class="card" *ngFor="let a of vm.list; trackBy: trackById">
-        <app-activity-card [activity]="a" [now]="vm.now" [registered]="vm.registeredIds.has(a.id)" (register)="selected = $event" (details)="selected = $event"></app-activity-card>
+        <app-activity-card [activity]="a" [now]="vm.now" [readOnly]="readOnly" [registered]="vm.registeredIds.has(a.id)" (register)="selected = $event" (details)="selected = $event"></app-activity-card>
       </div>
     </div>
     <ng-template #none><p class="card empty">No activities match your filters.</p></ng-template>
   </section>
 
-  <app-activity-detail-modal *ngIf="selected" [activity]="selected" [now]="vm.now" [busy]="busy"
+  <app-activity-detail-modal *ngIf="selected" [activity]="selected" [now]="vm.now" [busy]="busy" [readOnly]="readOnly"
     [registered]="vm.registeredIds.has(selected.id)" (confirm)="confirm($event)" (closed)="selected = null"></app-activity-detail-modal>
 </ng-container>
 <ng-template #loading><p class="empty">Loading activities…</p></ng-template>

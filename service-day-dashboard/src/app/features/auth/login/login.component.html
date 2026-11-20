@@ -1,4 +1,4 @@
-<main class="login">
+<main class="login" [class.login--admin]="adminMode">
   <div class="shape shape--ring-a" aria-hidden="true"></div>
   <div class="shape shape--ring-b" aria-hidden="true"></div>
   <div class="shape shape--bolt" aria-hidden="true"></div>
@@ -11,9 +11,14 @@
       <span class="glass__mark"><app-icon name="heart"></app-icon></span>
       <span>Service Day</span>
     </div>
-    <h1 id="login-title">Login</h1>
+    <h1 id="login-title">{{ registerMode ? 'Create an account' : adminMode ? 'Administrator sign in' : 'Employee sign in' }}</h1>
+    <div class="login-modes" *ngIf="!registerMode" role="group" aria-label="Choose sign-in type">
+      <button type="button" [class.active]="!adminMode" (click)="switchLoginMode(false)">Employee</button>
+      <button type="button" [class.active]="adminMode" (click)="switchLoginMode(true)">Administrator</button>
+    </div>
+    <p class="alert" role="status" *ngIf="successMessage">{{ successMessage }}</p>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <form *ngIf="!registerMode" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="field">
         <label for="email">Email</label>
         <input id="email" class="input" type="email" formControlName="email" placeholder="username@company.com" autocomplete="username" [class.invalid]="invalid('email')" />
@@ -34,9 +39,22 @@
       <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <button type="submit" class="signin" [disabled]="submitting">{{ submitting ? 'Signing in…' : 'Sign in' }}</button>
+      <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
     </form>
 
-    <div class="demo">
+    <form *ngIf="registerMode" [formGroup]="registerForm" (ngSubmit)="submitRegistration()" novalidate>
+      <div class="field"><label for="register-name">Full name</label><input id="register-name" class="input" formControlName="name" autocomplete="name" /></div>
+      <div class="field"><label for="register-email">Email</label><input id="register-email" class="input" type="email" formControlName="email" autocomplete="email" /></div>
+      <div class="field"><label for="register-department">Department</label><input id="register-department" class="input" formControlName="department" /></div>
+      <div class="field"><label for="register-title">Job title</label><input id="register-title" class="input" formControlName="jobTitle" /></div>
+      <div class="field"><label for="register-password">Password</label><input id="register-password" class="input" type="password" formControlName="password" autocomplete="new-password" /></div>
+      <p class="error" *ngIf="registerForm.invalid && registerForm.touched">Complete all fields with a valid email and password of at least 6 characters.</p>
+      <button type="submit" class="signin" [disabled]="registering">{{ registering ? 'Creating account…' : 'Register' }}</button>
+      <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </form>
+    <button *ngIf="!adminMode" type="button" class="mode-toggle" (click)="registerMode = !registerMode; errorMessage = ''; successMessage = ''">{{ registerMode ? 'Already have an account? Sign in' : 'New here? Register' }}</button>
+
+    <div class="demo" *ngIf="!registerMode && !adminMode">
       <p>Prototype accounts — tap to fill</p>
       <div class="demo__row">
         <button type="button" *ngFor="let a of demoAccounts" (click)="useDemo(a)">{{ a.label }}</button>

@@ -7,6 +7,7 @@
       <app-stat-card label="Checked in" [value]="vm.checkedIn" hint="Recorded via QR code" icon="qr" tone="pink"></app-stat-card>
     </section>
 
+    @defer (on viewport) {
     <div class="split">
       <section class="card" aria-labelledby="ut">
         <div class="card__head"><div><h2 class="card__title" id="ut">Slot utilisation</h2><p class="card__sub">Slots taken vs. offered per NGO — live</p></div></div>
@@ -47,6 +48,9 @@
         <p class="empty" *ngIf="!vm.rows.length">No activities match your search.</p>
       </div>
     </section>
+    } @placeholder {
+      <section class="card" aria-label="Dashboard charts and activities loading"><p class="empty">Scroll to load charts and activities.</p></section>
+    }
   </div>
 </ng-container>
 <ng-template #loading><p class="empty">Loading dashboard…</p></ng-template>

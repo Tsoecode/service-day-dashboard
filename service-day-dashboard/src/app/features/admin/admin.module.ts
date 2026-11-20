@@ -7,11 +7,13 @@ import { AdminCheckInComponent } from './check-in/check-in.component';
 import { ManageNgosComponent } from './manage-ngos/manage-ngos.component';
 import { AdminNotificationsComponent } from './notifications/notifications.component';
 import { ParticipationComponent } from './participation/participation.component';
+import { UserApprovalsComponent } from './user-approvals/user-approvals.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: 'dashboard', component: AdminDashboardComponent, data: { title: 'Dashboard', search: true } },
   { path: 'ngos', component: ManageNgosComponent, data: { title: 'Manage NGOs', search: true } },
+  { path: 'user-approvals', component: UserApprovalsComponent, data: { title: 'User Approvals' } },
   { path: 'participation', component: ParticipationComponent, data: { title: 'Participation & Slot Utilisation', search: true } },
   { path: 'notifications', component: AdminNotificationsComponent, data: { title: 'Notifications & Reminders' } },
   { path: 'check-in', component: AdminCheckInComponent, data: { title: 'Check-in & Reports' } }
@@ -21,7 +23,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AdminDashboardComponent, ManageNgosComponent, ParticipationComponent, AdminNotificationsComponent,
-    AdminCheckInComponent, BroadcastFormComponent
+    AdminCheckInComponent, BroadcastFormComponent, UserApprovalsComponent
   ],
   imports: [SharedModule, RouterModule.forChild(routes)]
 })

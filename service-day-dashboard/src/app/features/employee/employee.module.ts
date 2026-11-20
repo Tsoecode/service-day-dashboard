@@ -8,14 +8,15 @@ import { MyRegistrationsComponent } from './my-registrations/my-registrations.co
 import { EmployeeNotificationsComponent } from './notifications/notifications.component';
 import { OpportunitiesComponent } from './opportunities/opportunities.component';
 import { RegistrationFlow } from './services/registration-flow.service';
+import { approvedEmployeeGuard } from '../../core/guards/auth.guards';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: EmployeeDashboardComponent, data: { title: 'Dashboard', search: true } },
+  { path: 'dashboard', canActivate: [approvedEmployeeGuard], component: EmployeeDashboardComponent, data: { title: 'Dashboard', search: true } },
   { path: 'opportunities', component: OpportunitiesComponent, data: { title: 'Service Day Opportunities', search: true } },
-  { path: 'my-registrations', component: MyRegistrationsComponent, data: { title: 'My Registrations' } },
-  { path: 'check-in', component: CheckInComponent, data: { title: 'QR Check-in' } },
-  { path: 'notifications', component: EmployeeNotificationsComponent, data: { title: 'Notifications' } }
+  { path: 'my-registrations', canActivate: [approvedEmployeeGuard], component: MyRegistrationsComponent, data: { title: 'My Registrations' } },
+  { path: 'check-in', canActivate: [approvedEmployeeGuard], component: CheckInComponent, data: { title: 'QR Check-in' } },
+  { path: 'notifications', canActivate: [approvedEmployeeGuard], component: EmployeeNotificationsComponent, data: { title: 'Notifications' } }
 ];
 
 /** Feature module (lazy-loaded) for every employee-facing page. */
