@@ -27,16 +27,16 @@
   background: linear-gradient(135deg, #8cc4ff, #2a74f0); box-shadow: inset 0 -10px 16px rgba(10, 60, 170, 0.5), 0 18px 26px rgba(2, 20, 80, 0.4); }
 .shape--pill-b { width: 90px; height: 36px; left: 8%; top: 40%; border-radius: 999px; transform: rotate(-12deg);
   background: linear-gradient(135deg, #b6dbff, #4a90ff); box-shadow: inset 0 -6px 10px rgba(10, 60, 170, 0.45), 0 12px 18px rgba(2, 20, 80, 0.35); }
-.shape--wave { width: 110px; height: 30px; right: 8%; bottom: 12%; border-radius: 999px; background: linear-gradient(135deg, #a9d2ff, #5f9bff); transform: rotate(4deg);
-  box-shadow: 0 -22px 0 -4px #7db8ff, 0 12px 18px rgba(2, 20, 80, 0.35); }
 
 // ---- glass card -------------------------------------------------------------
 .glass {
   position: relative; z-index: 1; width: 100%; max-width: 380px; padding: 32px 30px; color: #fff; border-radius: 28px;
   background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.28); box-shadow: 0 24px 60px rgba(2, 20, 80, 0.4);
   backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
-  transition: box-shadow 900ms ease-in-out, border-color 900ms ease-in-out;
+  transform: translateY(0) scale(1);
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 900ms ease-in-out, border-color 900ms ease-in-out;
 }
+
 .glass__logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; font-weight: 700; margin-bottom: 22px; }
 .glass__mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(255, 255, 255, 0.9); color: #0a58cf; font-size: 18px; }
 h1 { margin: 0 0 14px; font-size: 22px; }
@@ -61,14 +61,16 @@ form { display: flex; flex-direction: column; gap: 14px; }
   &__row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   button { padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.92); color: #0a3d9e; font-size: 12px; font-weight: 600; &:hover { background: #fff; } } }
 
-// Administrator sign-in uses the violet palette from the admin dashboard account cards.
+// Administrator sign-in
 .login--admin {
   .shape::before { opacity: 1; }
+  .shape--ring-a { background: linear-gradient(135deg, #f1c2ff, #7a5cff) border-box; filter: drop-shadow(0 18px 24px rgba(47, 25, 130, 0.45)); }
+  .shape--ring-b { background: linear-gradient(200deg, #f6d5ff, #7a5cff) border-box; filter: drop-shadow(0 16px 20px rgba(47, 25, 130, 0.4)); }
   .shape--bolt::before { background: linear-gradient(135deg, #f1c2ff, #8c73ff); box-shadow: inset 0 -8px 14px rgba(69, 35, 190, 0.5), 0 16px 24px rgba(47, 25, 130, 0.4); }
   .shape--pill-a::before { background: linear-gradient(135deg, #e7a3ff, #7658f5); box-shadow: inset 0 -10px 16px rgba(69, 35, 190, 0.5), 0 18px 26px rgba(47, 25, 130, 0.4); }
   .shape--pill-b::before { background: linear-gradient(135deg, #f6d5ff, #9a83ff); box-shadow: inset 0 -6px 10px rgba(69, 35, 190, 0.45), 0 12px 18px rgba(47, 25, 130, 0.35); }
   .shape--wave::before { background: linear-gradient(135deg, #e7a3ff, #9a83ff); box-shadow: 0 -22px 0 -4px #c686ff, 0 12px 18px rgba(47, 25, 130, 0.35); }
-  .glass { border-color: rgba(255, 255, 255, 0.38); box-shadow: 0 24px 60px rgba(47, 25, 130, 0.4); }
+  .glass { transform: translateY(-3px) scale(1.01); border-color: rgba(255, 255, 255, 0.38); box-shadow: 0 24px 60px rgba(47, 25, 130, 0.4); }
   .glass__mark { color: #5434ec; }
   .login-modes { background: rgba(55, 30, 145, 0.2); }
   .login-modes button.active { color: #5434ec; }
@@ -77,6 +79,7 @@ form { display: flex; flex-direction: column; gap: 14px; }
 
 @media (prefers-reduced-motion: reduce) {
   .login::before, .shape::before, .glass { transition-duration: 0.01ms; }
+  .glass { transform: none; }
 }
 
 @media (max-width: 760px) {
