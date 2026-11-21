@@ -18,7 +18,7 @@ export const roleGuard: CanActivateFn = route => {
 /** Pending users can browse opportunities but cannot enter employee tools. */
 export const approvedEmployeeGuard: CanActivateFn = route => {
   const user = inject(AuthService).user;
-  return user?.status !== 'unapproved' || route.routeConfig?.path === 'opportunities'
+  return (user?.status !== 'unapproved' && user?.status !== 'rejected') || route.routeConfig?.path === 'opportunities'
     ? true
     : inject(Router).createUrlTree(['/employee/opportunities']);
 };

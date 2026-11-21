@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'opportunities', component: OpportunitiesComponent, data: { title: 'Service Day Opportunities', search: true } },
   { path: 'my-registrations', canActivate: [approvedEmployeeGuard], component: MyRegistrationsComponent, data: { title: 'My Registrations' } },
   { path: 'check-in', canActivate: [approvedEmployeeGuard], component: CheckInComponent, data: { title: 'QR Check-in' } },
-  { path: 'notifications', canActivate: [approvedEmployeeGuard], component: EmployeeNotificationsComponent, data: { title: 'Notifications' } }
+  { path: 'notifications', component: EmployeeNotificationsComponent, data: { title: 'Notifications' } }
 ];
 
 /** Feature module (lazy-loaded) for every employee-facing page. */

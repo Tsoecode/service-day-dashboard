@@ -49,7 +49,8 @@
     </header>
 
     <main class="page">
-      <div class="card" *ngIf="user.status === 'unapproved'" role="status">Your account is awaiting administrator approval. You can browse opportunities, but cannot register or access employee tools until approved.</div>
+      <div class="card" *ngIf="user.status === 'unapproved'" role="status">Your account is still in the approval process. You can browse opportunities and notifications, but cannot apply for activities until an administrator approves it.</div>
+      <div class="card" *ngIf="user.status === 'rejected'" role="status">Your account was not approved. Review the administrator's message in Notifications. Confirming that message will permanently delete your account.</div>
       <router-outlet></router-outlet>
     </main>
   </div>

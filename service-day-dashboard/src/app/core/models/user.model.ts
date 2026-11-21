@@ -1,5 +1,5 @@
 export type Role = 'admin' | 'employee';
-export type UserStatus = 'unapproved' | 'approved';
+export type UserStatus = 'unapproved' | 'approved' | 'rejected';
 
 export interface User {
   id: string;
@@ -7,6 +7,8 @@ export interface User {
   email: string;
   role: Role;
   status?: UserStatus;
+  decisionMessage?: string;
+  decisionAt?: string;
   department: string;
   jobTitle: string;
 }

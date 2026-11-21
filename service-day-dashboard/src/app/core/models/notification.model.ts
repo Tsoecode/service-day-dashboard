@@ -1,5 +1,5 @@
 export type NotificationType =
-  | 'registration' | 'update' | 'cancellation' | 'reminder' | 'broadcast' | 'urgent' | 'checkin';
+  | 'registration' | 'update' | 'cancellation' | 'reminder' | 'broadcast' | 'urgent' | 'checkin' | 'approval' | 'rejection';
 
 export type BroadcastTarget = 'all' | 'registered' | 'unregistered';
 

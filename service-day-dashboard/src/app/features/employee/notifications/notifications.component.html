@@ -9,6 +9,7 @@
       <div class="txt">
         <strong>{{ n.title }} <span class="badge" data-status="full" *ngIf="n.urgent">Urgent</span></strong>
         <p>{{ n.message }}</p>
+        <button *ngIf="n.type === 'rejection' && user?.status === 'rejected'" type="button" class="btn btn--danger btn--sm" [disabled]="confirmingRejection" (click)="$event.stopPropagation(); confirmRejection()">{{ confirmingRejection ? 'Deleting account…' : 'Confirm and delete account' }}</button>
         <small>{{ n.createdAt | date: 'd MMM y, h:mm a' }}</small>
       </div>
       <span class="new" *ngIf="!n.read" aria-label="Unread"></span>

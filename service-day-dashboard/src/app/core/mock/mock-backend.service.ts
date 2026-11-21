@@ -50,6 +50,8 @@ export class MockBackendService {
       try {
         this.db = JSON.parse(saved) as Db;
         this.db.users.forEach(user => { user.status = user.status ?? 'approved'; });
+        this.db.approvalHistory = this.db.approvalHistory ?? [];
+        this.db.deletedAccounts = this.db.deletedAccounts ?? [];
         return of(this.db);
       } catch { /* corrupted -> reseed */ }
     }
@@ -90,7 +92,7 @@ export class MockBackendService {
           urgent: n.urgent, createdAt: iso(now - n.hoursAgo * HOUR), readBy: []
         }));
         this.db = {
-          users: seed.users, activities, registrations, notifications,
+          users: seed.users, approvalHistory: [], deletedAccounts: [], activities, registrations, notifications,
           settings: seed.settings, sentKeys: [], seq: 1000
         };
         this.persist(this.db);
@@ -111,6 +113,34 @@ export class MockBackendService {
     return `SDQR-${activityId.toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
   }
 
+  private permanentlyDeleteUser(db: Db, userId: string, email: string, name?: string, reason: string = 'Permanently deleted'): void {
+    db.deletedAccounts = db.deletedAccounts ?? [];
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!db.deletedAccounts.some(d => d.email.toLowerCase() === normalizedEmail)) {
+      db.deletedAccounts.push({
+        email: normalizedEmail,
+        userId,
+        name,
+        deletedAt: new Date().toISOString(),
+        reason
+      });
+    }
+    db.users = db.users.filter(u => u.id !== userId && u.email.toLowerCase() !== normalizedEmail);
+    db.registrations = db.registrations.filter(r => r.userId !== userId);
+    db.notifications = db.notifications.filter(n => {
+      if (Array.isArray(n.recipientIds)) {
+        return !n.recipientIds.includes(userId);
+      }
+      return true;
+    });
+    if (db.approvalHistory) {
+      const hist = db.approvalHistory.find(h => h.userId === userId || h.email.toLowerCase() === normalizedEmail);
+      if (hist) {
+        hist.accountDeleted = true;
+      }
+    }
+  }
+
   // ---------------------------------------------------------------- routing
   private route(db: Db, req: HttpRequest<unknown>): unknown {
     const url = new URL(req.url, window.location.origin);
@@ -125,20 +155,68 @@ export class MockBackendService {
 
     const me = this.currentUser(db, req);
     this.runScheduler(db);
-    if (me.status === 'unapproved' && !(method === 'GET' && ['activities', 'registrations'].includes(seg[0]))) {
-      throw new ApiError(403, 'Your account is read-only until an administrator approves it.');
+    if (me.status === 'unapproved' || me.status === 'rejected') {
+      if (!this.pendingAccountAllowed(seg, method)) {
+        throw new ApiError(403, me.status === 'rejected' ? 'Your account was not approved. Review the message in Notifications.' : 'Your account is still in approval process. You cannot apply for activities until an administrator approves it.');
+      }
     }
+    if (seg[0] === 'users' && seg[1] === 'me' && method === 'GET') return this.publicUser(me);
 
     if (seg[0] === 'users' && seg[1] === 'pending' && method === 'GET') {
       this.requireAdmin(me);
       return db.users.filter(u => u.role === 'employee' && u.status === 'unapproved').map(u => this.publicUser(u));
     }
+    if (seg[0] === 'users' && seg[1] && seg.length === 2 && method === 'DELETE') {
+      this.requireAdmin(me);
+      const user = db.users.find(u => u.id === seg[1]);
+      if (!user) throw new ApiError(404, 'User not found.');
+      if (user.role === 'admin') throw new ApiError(400, 'Cannot delete an administrator account.');
+      this.permanentlyDeleteUser(db, user.id, user.email, user.name, 'Deleted by administrator');
+      return { ok: true };
+    }
+    if (seg[0] === 'users' && seg[1] === 'approval-history' && method === 'GET') {
+      this.requireAdmin(me);
+      return db.approvalHistory ?? [];
+    }
+    if (seg[0] === 'users' && seg[1] === 'approval-history' && seg[2] && method === 'DELETE') {
+      this.requireAdmin(me);
+      const historyItem = (db.approvalHistory ?? []).find(item => item.id === seg[2]);
+      if (historyItem) {
+        this.permanentlyDeleteUser(db, historyItem.userId, historyItem.email, historyItem.name, 'Deleted by administrator from history');
+        db.approvalHistory = (db.approvalHistory ?? []).filter(item => item.id !== seg[2]);
+      }
+      return { ok: true };
+    }
+    if (seg[0] === 'users' && seg[1] === 'rejection' && method === 'GET') {
+      return this.publicUser(this.findRejectedAccount(db, me));
+    }
+    if (seg[0] === 'users' && seg[1] === 'rejection' && seg[2] === 'confirm' && method === 'POST') {
+      const user = this.findRejectedAccount(db, me);
+      this.permanentlyDeleteUser(db, user.id, user.email, user.name, 'Confirmed by user rejection');
+      if (db.approvalHistory) {
+        const hist = db.approvalHistory.find(h => h.userId === user.id || h.email.toLowerCase() === user.email.toLowerCase());
+        if (hist) {
+          hist.userConfirmed = true;
+          hist.accountDeleted = true;
+        }
+      }
+      return { ok: true };
+    }
     if (seg[0] === 'users' && seg[2] === 'approve' && method === 'POST') {
       this.requireAdmin(me);
-      const user = db.users.find(u => u.id === seg[1] && u.role === 'employee');
-      if (!user) throw new ApiError(404, 'User not found.');
-      user.status = 'approved';
-      return this.publicUser(user);
+      const user = db.users.find(u => u.id === seg[1] && u.role === 'employee' && u.status === 'unapproved');
+      if (!user) throw new ApiError(404, 'Pending user not found.');
+      const result = this.decideAccount(db, me, user, 'approved', String(body.message ?? '').trim());
+      this.pushNotification(db, { audience: 'employee', recipientIds: [user.id], recipientLabel: user.name, type: 'approval', title: 'Account approved', message: body.message?.trim() || 'Your account is approved. You can now apply for activities.' });
+      return result;
+    }
+    if (seg[0] === 'users' && seg[2] === 'reject' && method === 'POST') {
+      this.requireAdmin(me);
+      const user = db.users.find(u => u.id === seg[1] && u.role === 'employee' && u.status === 'unapproved');
+      if (!user) throw new ApiError(404, 'Pending user not found.');
+      const result = this.decideAccount(db, me, user, 'rejected', String(body.message ?? '').trim());
+      this.pushNotification(db, { audience: 'employee', recipientIds: [user.id], recipientLabel: user.name, type: 'rejection', title: 'Account not approved', message: `${body.message?.trim() ? `${body.message.trim()} ` : ''}Confirming will permanently delete your account.` });
+      return result;
     }
 
     switch (seg[0]) {
@@ -168,6 +246,25 @@ export class MockBackendService {
     return { ...rest, status: u.status ?? 'approved' };
   }
 
+  private decideAccount(db: Db, admin: DbUser, user: DbUser, decision: 'approved' | 'rejected', message: string) {
+    const decidedAt = new Date().toISOString();
+    user.status = decision;
+    user.decisionMessage = message;
+    user.decisionAt = decidedAt;
+    db.approvalHistory = db.approvalHistory ?? [];
+    db.approvalHistory.unshift({
+      id: this.nextId(db, 'ah'), userId: user.id, name: user.name, email: user.email,
+      department: user.department, jobTitle: user.jobTitle, decision, message, decidedAt, decidedBy: admin.name
+    });
+    return this.publicUser(user);
+  }
+
+  private findRejectedAccount(db: Db, me: DbUser): DbUser {
+    const user = db.users.find(item => item.id === me.id && item.role === 'employee' && item.status === 'rejected');
+    if (!user) throw new ApiError(404, 'No rejected account is awaiting confirmation.');
+    return user;
+  }
+
   private register(db: Db, body: any) {
     const name = String(body.name ?? '').trim();
     const email = String(body.email ?? '').trim().toLowerCase();
@@ -176,6 +273,10 @@ export class MockBackendService {
     const jobTitle = String(body.jobTitle ?? '').trim();
     if (!name || !email || !password || !department || !jobTitle) throw new ApiError(400, 'Complete all registration fields.');
     if (password.length < 6) throw new ApiError(400, 'Password must be at least 6 characters.');
+    db.deletedAccounts = db.deletedAccounts ?? [];
+    if (db.deletedAccounts.some(d => d.email.toLowerCase() === email)) {
+      throw new ApiError(403, 'This account has been permanently deleted and cannot be registered or used again.');
+    }
     if (db.users.some(u => u.email.toLowerCase() === email)) throw new ApiError(409, 'An account with this email already exists.');
     const user: DbUser = {
       id: this.nextId(db, 'u'), name, email, password, role: 'employee', status: 'unapproved', department, jobTitle
@@ -186,9 +287,12 @@ export class MockBackendService {
 
   private login(db: Db, body: any, role: 'admin' | 'employee') {
     const email = String(body.email ?? '').trim().toLowerCase();
+    db.deletedAccounts = db.deletedAccounts ?? [];
+    if (db.deletedAccounts.some(d => d.email.toLowerCase() === email)) {
+      throw new ApiError(403, 'This account has been permanently deleted and cannot be used or signed in again.');
+    }
     const user = db.users.find(u => u.email.toLowerCase() === email && u.password === body.password && u.role === role);
     if (!user) throw new ApiError(401, 'Invalid email or password.');
-    if (user.status === 'unapproved') throw new ApiError(403, 'Your account is awaiting administrator approval.');
     return { user: this.publicUser(user), token: `mock.${user.id}` };
   }
 
@@ -196,12 +300,29 @@ export class MockBackendService {
     const auth = req.headers.get('Authorization') ?? '';
     const id = auth.replace('Bearer mock.', '');
     const user = db.users.find(u => u.id === id);
-    if (!user) throw new ApiError(401, 'Please sign in again.');
+    if (!user) {
+      db.deletedAccounts = db.deletedAccounts ?? [];
+      if (db.deletedAccounts.some(d => d.userId === id)) {
+        throw new ApiError(401, 'This account has been permanently deleted and cannot be used.');
+      }
+      throw new ApiError(401, 'Please sign in again.');
+    }
     return user;
   }
 
   private requireAdmin(me: DbUser): void {
     if (me.role !== 'admin') throw new ApiError(403, 'Administrator access required.');
+  }
+
+  /** Endpoints an account awaiting approval (or a rejected one) may still reach. */
+  private pendingAccountAllowed(seg: string[], method: string): boolean {
+    const readOnly = method === 'GET' && ['activities', 'registrations', 'notifications'].includes(seg[0]);
+    const ownProfile = seg[0] === 'users' && seg[1] === 'me' && method === 'GET';
+    const rejection = seg[0] === 'users' && seg[1] === 'rejection' && (method === 'GET' || (seg[2] === 'confirm' && method === 'POST'));
+    const notificationRead = seg[0] === 'notifications' && (
+      (method === 'POST' && seg[1] === 'read-all') || (method === 'PUT' && seg[2] === 'read')
+    );
+    return readOnly || ownProfile || rejection || notificationRead;
   }
 
   // ---------------------------------------------------------------- activities

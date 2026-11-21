@@ -1,7 +1,16 @@
 /** Raw shapes stored by the mock back-end (what a real database would hold). */
 export interface DbUser {
   id: string; name: string; email: string; password: string;
-  role: 'admin' | 'employee'; status: 'approved' | 'unapproved'; department: string; jobTitle: string;
+  role: 'admin' | 'employee'; status: 'approved' | 'unapproved' | 'rejected'; department: string; jobTitle: string;
+  decisionMessage?: string; decisionAt?: string;
+}
+export interface DbApprovalHistory {
+  id: string; userId: string; name: string; email: string; department: string; jobTitle: string;
+  decision: 'approved' | 'rejected'; message: string; decidedAt: string; decidedBy: string;
+  accountDeleted?: boolean; userConfirmed?: boolean;
+}
+export interface DbDeletedAccount {
+  email: string; userId?: string; name?: string; deletedAt: string; reason?: string;
 }
 export interface DbActivity {
   id: string; ngoName: string; title: string; serviceType: string; description: string; imageUrl?: string | null;
@@ -19,6 +28,8 @@ export interface DbNotification {
 }
 export interface Db {
   users: DbUser[];
+  approvalHistory?: DbApprovalHistory[];
+  deletedAccounts?: DbDeletedAccount[];
   activities: DbActivity[];
   registrations: DbRegistration[];
   notifications: DbNotification[];

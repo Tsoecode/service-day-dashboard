@@ -17,11 +17,22 @@ export class AuthService {
   get isLoggedIn(): boolean { return !!this.session$.value; }
   get isAdmin(): boolean { return this.user?.role === 'admin'; }
   get homeRoute(): string {
-    return this.isAdmin ? '/admin/dashboard' : this.user?.status === 'unapproved' ? '/employee/opportunities' : '/employee/dashboard';
+    return this.isAdmin ? '/admin/dashboard' : this.user?.status === 'unapproved' || this.user?.status === 'rejected' ? '/employee/opportunities' : '/employee/dashboard';
   }
 
   register(details: RegisterRequest): Observable<User> {
     return this.http.post<User>('/api/auth/register', details);
+  }
+
+  refreshUser(): Observable<User> {
+    return this.http.get<User>('/api/users/me').pipe(tap(user => {
+      const session = this.session$.value;
+      if (session) {
+        const updated = { ...session, user };
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+        this.session$.next(updated);
+      }
+    }));
   }
 
   login(credentials: LoginRequest, role: 'admin' | 'employee' = 'employee'): Observable<Session> {

@@ -16,7 +16,9 @@ export class OpportunitiesComponent {
   readonly availability$ = new BehaviorSubject<'all' | 'open'>('open');
   selected: Activity | null = null;
   busy = false;
+  showApprovalModal = false;
   readonly readOnly: boolean;
+  readonly pendingApproval: boolean;
 
   readonly vm$ = combineLatest([
     this.activities.activities$, this.registrations.registrations$, this.clock.now$, this.search.term$, this.type$, this.availability$
@@ -35,9 +37,25 @@ export class OpportunitiesComponent {
   constructor(
     private activities: ActivityService, private registrations: RegistrationService, private clock: ClockService,
     private search: SearchService, private flow: RegistrationFlow, auth: AuthService
-  ) { this.readOnly = auth.user?.status === 'unapproved'; }
+  ) {
+    this.readOnly = auth.user?.status === 'unapproved' || auth.user?.status === 'rejected';
+    this.pendingApproval = auth.user?.status === 'unapproved';
+  }
+
+  onRegister(activity: Activity): void {
+    if (this.pendingApproval) {
+      this.showApprovalModal = true;
+      return;
+    }
+    this.selected = activity;
+  }
 
   confirm(activity: Activity): void {
+    if (this.pendingApproval) {
+      this.showApprovalModal = true;
+      this.selected = null;
+      return;
+    }
     this.busy = true;
     this.flow.register(activity).subscribe(result => {
       this.busy = false;

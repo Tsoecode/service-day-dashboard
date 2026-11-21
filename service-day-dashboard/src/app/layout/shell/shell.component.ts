@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { Role } from '../../core/models';
-import { AuthService, NotificationService, SearchService } from '../../core/services';
+import { AuthService, NotificationService, SearchService, UserService } from '../../core/services';
 
 interface NavItem { label: string; icon: string; link: string; }
 
@@ -33,8 +33,8 @@ const NAV: Record<Role, NavItem[]> = {
 })
 export class ShellComponent implements OnDestroy {
   readonly user = this.auth.user!;
-  readonly nav = this.user.status === 'unapproved'
-    ? NAV.employee.filter(item => item.label === 'Opportunities')
+  readonly nav = this.user.status === 'unapproved' || this.user.status === 'rejected'
+    ? NAV.employee.filter(item => item.label === 'Opportunities' || item.label === 'Notifications')
     : NAV[this.user.role];
   readonly firstName = this.user.name.split(' ')[0];
   readonly initials = this.user.name.split(' ').map(p => p[0]).slice(0, 2).join('');

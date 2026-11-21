@@ -9,4 +9,5 @@ export * from './notification.service';
 export * from './check-in.service';
 export * from './demo.service';
 export * from './session.interceptor';
+export * from './auth-error.interceptor';
 export * from './user.service';

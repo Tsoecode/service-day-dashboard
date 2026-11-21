@@ -1,0 +1,44 @@
+<section class="card">
+  <div class="card__head"><div><h2 class="card__title">Pending employee approvals</h2><p class="card__sub">Review each request, add an optional message, and approve or reject it.</p></div></div>
+  <label class="message-field">Decision message (optional)<textarea class="input" rows="2" [(ngModel)]="decisionMessage" placeholder="Share a note with the applicant"></textarea></label>
+  <p class="card__sub" *ngIf="loading">Loading requests…</p>
+  <p class="card__sub" *ngIf="!loading && !users.length">No accounts are waiting for approval.</p>
+  <div class="table-wrap" *ngIf="users.length"><table class="table stackable">
+    <thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Job title</th><th>Actions</th></tr></thead>
+    <tbody><tr *ngFor="let user of users">
+      <td data-label="Name">{{ user.name }}</td><td data-label="Email">{{ user.email }}</td><td data-label="Department">{{ user.department }}</td><td data-label="Job title">{{ user.jobTitle }}</td>
+      <td data-label="Actions" class="actions">
+        <button class="btn btn--primary btn--sm" type="button" [disabled]="busyId === user.id" (click)="decide(user, 'approved')">{{ busyId === user.id ? 'Saving…' : 'Approve' }}</button>
+        <button class="btn btn--ghost btn--sm" type="button" [disabled]="busyId === user.id" (click)="decide(user, 'rejected')">Reject</button>
+        <button class="btn btn--danger btn--sm" type="button" [disabled]="busyId === user.id" (click)="deletePendingUser(user)">Delete</button>
+      </td>
+    </tr></tbody>
+  </table></div>
+  <p class="alert" role="alert" *ngIf="error">{{ error }}</p>
+</section>
+
+<section class="card history-card">
+  <div class="card__head"><div><h2 class="card__title">Approval history</h2><p class="card__sub">Completed decisions, including applicant details and the message sent.</p></div>
+    <label class="period-filter">Show <select class="input" [(ngModel)]="historyPeriod"><option value="day">Today</option><option value="week">This week</option><option value="month">This month</option></select></label>
+  </div>
+  <p class="card__sub" *ngIf="historyLoading">Loading history…</p>
+  <p class="card__sub" *ngIf="!historyLoading && !filteredHistory.length">No decisions for this period.</p>
+  <div class="table-wrap" *ngIf="filteredHistory.length"><table class="table stackable">
+    <thead><tr><th>Decision time</th><th>Applicant</th><th>Email</th><th>Department / title</th><th>Decision</th><th>Account status</th><th>Message</th><th>Reviewed by</th><th></th></tr></thead>
+    <tbody><tr *ngFor="let item of filteredHistory">
+      <td data-label="Decision time">{{ item.decidedAt | date:'medium' }}</td>
+      <td data-label="Applicant">{{ item.name }}</td>
+      <td data-label="Email">{{ item.email }}</td>
+      <td data-label="Department / title">{{ item.department }} / {{ item.jobTitle }}</td>
+      <td data-label="Decision"><span class="decision" [class.decision--approved]="item.decision === 'approved'">{{ item.decision | titlecase }}</span></td>
+      <td data-label="Account status">
+        <span class="decision" [style.background]="item.accountDeleted ? '#fee4e2' : item.userConfirmed ? '#fef0c7' : '#e6f7ee'" [style.color]="item.accountDeleted ? '#b42318' : item.userConfirmed ? '#93370d' : '#177345'">
+          {{ item.accountDeleted ? 'Permanently Deleted' : (item.decision === 'rejected' ? (item.userConfirmed ? 'Confirmed Deletion' : 'Pending Confirmation') : 'Active') }}
+        </span>
+      </td>
+      <td data-label="Message">{{ item.message || '—' }}</td>
+      <td data-label="Reviewed by">{{ item.decidedBy }}</td>
+      <td><button type="button" class="btn btn--danger btn--sm" [disabled]="busyId === item.id" (click)="deleteHistory(item)">Delete</button></td>
+    </tr></tbody>
+  </table></div>
+</section>

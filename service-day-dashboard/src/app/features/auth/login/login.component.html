@@ -39,7 +39,6 @@
       <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <button type="submit" class="signin" [disabled]="submitting">{{ submitting ? 'Signing in…' : 'Sign in' }}</button>
-      <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
     </form>
 
     <form *ngIf="registerMode" [formGroup]="registerForm" (ngSubmit)="submitRegistration()" novalidate>
@@ -49,8 +48,8 @@
       <div class="field"><label for="register-title">Job title</label><input id="register-title" class="input" formControlName="jobTitle" /></div>
       <div class="field"><label for="register-password">Password</label><input id="register-password" class="input" type="password" formControlName="password" autocomplete="new-password" /></div>
       <p class="error" *ngIf="registerForm.invalid && registerForm.touched">Complete all fields with a valid email and password of at least 6 characters.</p>
-      <button type="submit" class="signin" [disabled]="registering">{{ registering ? 'Creating account…' : 'Register' }}</button>
       <p class="alert" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit" class="signin" [disabled]="registering">{{ registering ? 'Creating account…' : 'Register' }}</button>
     </form>
     <button *ngIf="!adminMode" type="button" class="mode-toggle" (click)="registerMode = !registerMode; errorMessage = ''; successMessage = ''">{{ registerMode ? 'Already have an account? Sign in' : 'New here? Register' }}</button>
 

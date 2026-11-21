@@ -14,7 +14,7 @@
   <p class="alert" *ngIf="!registered && status === 'full'">This activity is full.</p>
   <div class="form-actions">
     <button type="button" class="btn btn--ghost" (click)="closed.emit()">Close</button>
-    <button type="button" class="btn btn--primary" *ngIf="canRegister" [disabled]="busy" (click)="confirm.emit(activity)">
+    <button type="button" class="btn btn--primary" *ngIf="canRegister || pendingApproval" [disabled]="busy" (click)="onRegisterClick()">
       {{ busy ? 'Registering…' : 'Confirm registration' }}
     </button>
   </div>

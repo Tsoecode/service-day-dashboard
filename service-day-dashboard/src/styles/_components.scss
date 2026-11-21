@@ -29,6 +29,7 @@
     &:hover:not(:disabled) { background: linear-gradient(135deg, #176de8 0%, #084bb3 55%, #095ed6 100%); box-shadow: 0 8px 18px rgba(10, 88, 207, 0.25); }
   }
   .btn--ghost { color: #0a58cf; border-color: #b8d4ff; &:hover:not(:disabled) { background: #eaf3ff; } }
+  .btn--danger { color: #a12b2b; border-color: #f1b7b7; background: #fff; &:hover:not(:disabled) { background: #fff0f0; } }
   .btn--light { color: #0a58cf; }
 }
 .icon-btn {

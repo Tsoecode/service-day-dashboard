@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { Activity, getStatus, slotsLeft } from '../../../core/models';
-import { ActivityService, ClockService, NotificationService, RegistrationService, SearchService } from '../../../core/services';
+import { ActivityService, AuthService, ClockService, NotificationService, RegistrationService, SearchService } from '../../../core/services';
 import { BarDatum } from '../../../shared/components/bar-chart/bar-chart.component';
 import { RegistrationFlow } from '../services/registration-flow.service';
 
@@ -15,6 +15,9 @@ export class EmployeeDashboardComponent {
   readonly getStatus = getStatus;
   selected: Activity | null = null;
   busy = false;
+  showApprovalModal = false;
+  readonly readOnly: boolean;
+  readonly pendingApproval: boolean;
 
   readonly vm$ = combineLatest([
     this.activities.activities$, this.registrations.registrations$, this.clock.now$, this.search.term$, this.notifications.unreadCount$
@@ -43,15 +46,32 @@ export class EmployeeDashboardComponent {
 
   constructor(
     private activities: ActivityService, private registrations: RegistrationService, private clock: ClockService,
-    private search: SearchService, private notifications: NotificationService, private flow: RegistrationFlow
-  ) {}
+    private search: SearchService, private notifications: NotificationService, private flow: RegistrationFlow,
+    auth: AuthService
+  ) {
+    this.readOnly = auth.user?.status === 'unapproved' || auth.user?.status === 'rejected';
+    this.pendingApproval = auth.user?.status === 'unapproved';
+  }
 
   confirm(activity: Activity): void {
+    if (this.pendingApproval) {
+      this.showApprovalModal = true;
+      this.selected = null;
+      return;
+    }
     this.busy = true;
     this.flow.register(activity).subscribe(result => {
       this.busy = false;
       if (result) this.selected = null;
     });
+  }
+
+  onAction(activity: Activity, registered: boolean, status: string): void {
+    if (!registered && status === 'open' && this.pendingApproval) {
+      this.showApprovalModal = true;
+      return;
+    }
+    this.selected = activity;
   }
 
   trackById(_: number, a: Activity): string { return a.id; }

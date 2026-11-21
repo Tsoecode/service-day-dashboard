@@ -4,7 +4,8 @@ import { mockBackendInterceptor } from './mock/mock-backend.interceptor';
 import { MockBackendService } from './mock/mock-backend.service';
 import {
   ActivityService, AuthService, CheckInService, ClockService, DemoService, NotificationService,
-  RegistrationService, SearchService, SyncService, ToastService, UserService, sessionInterceptor
+  RegistrationService, SearchService, SyncService, ToastService, UserService,
+  authErrorInterceptor, sessionInterceptor
 } from './services';
 
 /**
@@ -13,7 +14,7 @@ import {
  */
 @NgModule({
   providers: [
-    provideHttpClient(withInterceptors([sessionInterceptor, mockBackendInterceptor])),
+    provideHttpClient(withInterceptors([authErrorInterceptor, sessionInterceptor, mockBackendInterceptor])),
     MockBackendService,
     AuthService, SyncService, ClockService, SearchService, ToastService,
     ActivityService, RegistrationService, NotificationService, CheckInService, DemoService, UserService

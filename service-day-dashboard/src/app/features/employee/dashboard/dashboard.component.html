@@ -44,7 +44,7 @@
               <td class="actions-cell">
                 <div class="actions">
                   <span class="chip chip--ok" *ngIf="vm.registeredIds.has(a.id)">Registered</span>
-                  <button type="button" class="btn btn--ghost btn--sm" (click)="selected = a">{{ !vm.registeredIds.has(a.id) && getStatus(a, vm.now) === 'open' ? 'Register' : 'Details' }}</button>
+                  <button type="button" class="btn btn--ghost btn--sm" (click)="onAction(a, vm.registeredIds.has(a.id), getStatus(a, vm.now))">{{ !vm.registeredIds.has(a.id) && getStatus(a, vm.now) === 'open' ? 'Register' : 'Details' }}</button>
                 </div>
               </td>
             </tr>
@@ -59,6 +59,23 @@
   </div>
 
   <app-activity-detail-modal *ngIf="selected" [activity]="selected" [now]="vm.now" [busy]="busy"
-    [registered]="vm.registeredIds.has(selected.id)" (confirm)="confirm($event)" (closed)="selected = null"></app-activity-detail-modal>
+    [readOnly]="readOnly" [pendingApproval]="pendingApproval"
+    [registered]="vm.registeredIds.has(selected.id)" (confirm)="confirm($event)"
+    (blockedRegister)="selected = null; showApprovalModal = true"
+    (closed)="selected = null"></app-activity-detail-modal>
+
+  <app-modal *ngIf="showApprovalModal" title="Account in Approval Process" [width]="480" (closed)="showApprovalModal = false">
+    <p class="alert alert--info">Your account is still in the approval process.</p>
+    <p style="margin-top: 14px; line-height: 1.5; color: var(--text);">
+      Your registration is currently pending review by an administrator. While your account is awaiting authorization, registering or applying for CSR activities is not permitted.
+    </p>
+    <p style="margin-top: 10px; font-size: 13px; color: var(--muted);">
+      You can track your approval status or view messages sent by the administrator in your notifications.
+    </p>
+    <div class="form-actions">
+      <a class="btn btn--ghost" routerLink="/employee/notifications" (click)="showApprovalModal = false">Check Notifications</a>
+      <button type="button" class="btn btn--primary" (click)="showApprovalModal = false">Understood</button>
+    </div>
+  </app-modal>
 </ng-container>
 <ng-template #loading><p class="empty">Loading dashboard…</p></ng-template>

@@ -20,7 +20,7 @@
   <footer class="act__actions">
     <button type="button" class="btn btn--ghost" (click)="details.emit(activity)">Details</button>
     <span class="chip chip--ok" *ngIf="registered"><app-icon name="check"></app-icon>Registered</span>
-    <button type="button" class="btn btn--primary" *ngIf="!registered" [disabled]="!canRegister" (click)="register.emit(activity)">
+    <button type="button" class="btn btn--primary" *ngIf="!registered" [disabled]="!canRegister && !pendingApproval" (click)="onRegister()">
       {{ status === 'full' ? 'Full' : status === 'open' ? 'Register' : 'Closed' }}
     </button>
   </footer>
